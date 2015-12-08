@@ -1,5 +1,4 @@
 from flask_restful import Resource
-from flask_restplus import Api
 from SharedModels import docuApi
 
 @docuApi.route('/my-resource/<id>', endpoint='my-resource')

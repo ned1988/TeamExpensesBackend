@@ -10,8 +10,6 @@ from EventAllResource import EventAllResource
 app = Flask(__name__)
 app.config.SWAGGER_UI_DOC_EXPANSION = 'list'
 
-flaskApp = app
-
 docuApi.init_app(app)
 
 # app.config['SQLALCHEMY_DATABASE_URI'] = os.environ['DATABASE_URL']
