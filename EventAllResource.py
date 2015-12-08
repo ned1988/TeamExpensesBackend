@@ -1,8 +1,6 @@
 from flask_restful import Resource
 from SharedModels import docuApi
 
-@docuApi.route('/my-resource/<id>', endpoint='my-resource')
-@docuApi.doc(params={'id': 'An ID'})
 class EventAllResource(Resource):
     def get(self):
         return {"event" : "all"}
