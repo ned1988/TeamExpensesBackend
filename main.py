@@ -10,7 +10,7 @@ from RegisterUserResource import RegisterUserResource
 app = Flask(__name__)
 app.config.SWAGGER_UI_DOC_EXPANSION = 'list'
 
-app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///teamExpenses.db'
+app.config['SQLALCHEMY_DATABASE_URI'] = os.environ['DATABASE_URL']
 
 # Create Restful API
 api = Api(app)
