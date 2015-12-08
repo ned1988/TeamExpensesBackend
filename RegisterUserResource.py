@@ -14,15 +14,19 @@ class RegisterUserResource(Resource):
     def post(self):
         personModel = PersonModel()
 
-        personModel.facebook_id = request.form['email']
+        personModel.facebook_id = request.form['facebookID']
         personModel.email = request.form['email']
-        personModel.firstName = request.form['firstName']
-        personModel.lastName = request.form['lastName']
+        personModel.first_name = request.form['firstName']
+        personModel.last_name = request.form['lastName']
+
+        print request.form
 
         db.session.add(personModel)
-        # db.session.commit()
+        db.session.commit()
 
-        return personModel.to_dict
+        print personModel.to_dict()
+
+        return personModel.to_dict()
 
     @api.header('email', 'User email')
     @api.header('firstName', 'First Name')
