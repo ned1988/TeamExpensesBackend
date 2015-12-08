@@ -1,8 +1,6 @@
 __author__ = 'Denys.Meloshyn'
 
-from flask import Flask
 from flask_restplus import Api
-
 from flask_restful import reqparse
 from flask_sqlalchemy import SQLAlchemy
 
