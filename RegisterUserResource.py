@@ -5,12 +5,14 @@ from SharedModels import db
 from PersonModel import PersonModel
 from SharedModels import docuApi as api
 
-@api.header('facebookID', 'Facebook ID')
-
 class RegisterUserResource(Resource):
-    @api.header('email', 'User email', required=True)
-    @api.header('firstName', 'First Name', required=True)
-    @api.header('lastName', 'Last Name', required=True)
+    parser = api.parser()
+    parser.add_argument('facebookID', type=str, help='Facebook ID', location='form')
+    parser.add_argument('email', type=str, help='User email', location='form', required = True)
+    parser.add_argument('firstName', type=str, help='First Name', location='form', required = True)
+    parser.add_argument('lastName', type=str, help='Last Name', location='form', required = True)
+    @api.doc(parser=parser)
+
     def post(self):
         personModel = PersonModel()
 
@@ -24,13 +26,15 @@ class RegisterUserResource(Resource):
         db.session.add(personModel)
         db.session.commit()
 
-        print personModel.to_dict()
-
         return personModel.to_dict()
 
-    @api.header('email', 'User email')
-    @api.header('firstName', 'First Name')
-    @api.header('lastName', 'Last Name')
-    @api.header('userID', 'User ID', required=True, type = int)
+    parser = api.parser()
+    parser.add_argument('userID', type=str, help='User ID', location='form', required = True)
+    parser.add_argument('facebookID', type=str, help='Facebook ID', location='form')
+    parser.add_argument('facebookID', type=str, help='Facebook ID', location='form')
+    parser.add_argument('email', type=str, help='User email', location='form')
+    parser.add_argument('firstName', type=str, help='First Name', location='form')
+    parser.add_argument('lastName', type=str, help='Last Name', location='form')
+    @api.doc(parser=parser)
     def put(self):
         return {"event" : "all"}
