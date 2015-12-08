@@ -1,13 +1,10 @@
 __author__ = 'Denys.Meloshyn'
 
-import uuid
-import time
 from SharedModels import db
 
 class PersonModel(db.Model):
     def __init__(self):
-        token = str(uuid.uuid4()) + '|' + str(time.time() * 1000 )
-        self.token = token
+        self.token = ""
 
     person_id = db.Column(db.Integer, primary_key=True)
     first_name = db.Column(db.Text)

@@ -3,3 +3,4 @@ Flask==0.10.1
 Flask-SQLAlchemy==2.0
 flask-restplus
 psycopg2==2.6.1
+Flask-Passlib
