@@ -5,9 +5,9 @@ from flask_passlib import LazyCryptContext
 from flask_passlib.context import (werkzeug_salted_md5, werkzeug_salted_sha1, werkzeug_salted_sha256, werkzeug_salted_sha512)
 
 from UserAllResource import UserAllResource
-from SharedModels import db, docuApi, passlib
 from EventAllResource import EventAllResource
 from UserRegisterResource import UserRegisterResource
+from SharedModels import db, docuApi, passlib, token_secretKey
 
 # Create Flas application
 app = Flask(__name__)
@@ -21,6 +21,8 @@ api = Api(app)
 
 # Create REST API docimentation
 docuApi.init_app(app)
+
+# token_secretKey.replace(token_secretKey, app.config['SECRET_KEY'])
 
 passlib.init_app(app, context=LazyCryptContext(
     schemes=[

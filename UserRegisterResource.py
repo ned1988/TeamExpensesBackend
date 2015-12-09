@@ -4,6 +4,7 @@ from flask_restful import Resource
 from PersonModel import PersonModel
 from SharedModels import db, passlib
 from SharedModels import docuApi as api
+from token_serializer import TokenSerializer
 
 class UserRegisterResource(Resource):
     parser = api.parser()
@@ -22,14 +23,19 @@ class UserRegisterResource(Resource):
         personModel.first_name = request.form['firstName']
         personModel.last_name = request.form['lastName']
 
+        # Encrypt user password
         password = request.form['password']
         encr_password = passlib.encrypt(password, salt_length=100)
-        print password + ' ' + encr_password
-
         personModel.password = encr_password
 
+        # Add person to the model
         db.session.add(personModel)
         db.session.commit()
+
+        json_object = personModel.to_dict()
+
+        # Generate user token with expiration date
+        json_object[ 'token' ] = TokenSerializer.generate_auth_token(personModel.person_id)
 
         return personModel.to_dict()
 
