@@ -14,7 +14,6 @@ class UserRegisterResource(Resource):
     parser.add_argument('lastName', type=str, help='Last Name', location='form', required = True)
     parser.add_argument('password', type=str, help='Password', location='form', required = True)
     @api.doc(parser=parser)
-
     def post(self):
         personModel = PersonModel()
 

@@ -15,9 +15,9 @@ class TokenSerializer:
         try:
             data = tokenSerializer.loads(token)
         except SignatureExpired:
-            return False # valid token, but expired
+            return SignatureExpired # valid token, but expired
         except BadSignature:
-            return False # invalid token
+            return BadSignature # invalid token
 
         token_user_id = data['id']
         return token_user_id == user_id
