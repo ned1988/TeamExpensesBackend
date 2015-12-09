@@ -5,7 +5,7 @@ from PersonModel import PersonModel
 from SharedModels import db, passlib
 from SharedModels import docuApi as api
 
-class RegisterUserResource(Resource):
+class UserRegisterResource(Resource):
     parser = api.parser()
     parser.add_argument('facebookID', type=str, help='Facebook ID', location='form')
     parser.add_argument('email', type=str, help='User email', location='form', required = True)
@@ -24,11 +24,9 @@ class RegisterUserResource(Resource):
 
         password = request.form['password']
         encr_password = passlib.encrypt(password, salt_length=100)
-        print password
+        print password + ' ' + encr_password
 
-        print passlib.verify(password, encr_password)
-
-        print request.form
+        personModel.password = encr_password
 
         db.session.add(personModel)
         db.session.commit()

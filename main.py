@@ -4,9 +4,10 @@ from flask_restful import Api
 from flask_passlib import LazyCryptContext
 from flask_passlib.context import (werkzeug_salted_md5, werkzeug_salted_sha1, werkzeug_salted_sha256, werkzeug_salted_sha512)
 
+from UserAllResource import UserAllResource
 from SharedModels import db, docuApi, passlib
 from EventAllResource import EventAllResource
-from RegisterUserResource import RegisterUserResource
+from UserRegisterResource import UserRegisterResource
 
 # Create Flas application
 app = Flask(__name__)
@@ -33,8 +34,10 @@ passlib.init_app(app, context=LazyCryptContext(
 api.add_resource(EventAllResource, '/event/all')
 docuApi.add_resource(EventAllResource, '/event/all')
 
-api.add_resource(RegisterUserResource, '/user/register')
-docuApi.add_resource(RegisterUserResource, '/user/register')
+api.add_resource(UserAllResource, '/user/all')
+docuApi.add_resource(UserAllResource, '/user/all')
+api.add_resource(UserRegisterResource, '/user/register')
+docuApi.add_resource(UserRegisterResource, '/user/register')
 
 db.init_app(app)
 
