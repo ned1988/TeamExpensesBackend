@@ -7,7 +7,7 @@ from flask_sqlalchemy import SQLAlchemy
 
 db = SQLAlchemy()
 passlib = Passlib()
-docuApi = Api()
+api = Api()
 
 parser = reqparse.RequestParser()
 parser.add_argument('task', type=str)

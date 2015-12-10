@@ -45,4 +45,3 @@ class BaseResource(Resource):
 
         # If everything is Ok - return person model
         return person_model
-

@@ -1,9 +1,9 @@
 from flask import request
 from flask_restful import Resource
 
+from SharedModels import api
 from PersonModel import PersonModel
 from SharedModels import db, passlib
-from SharedModels import docuApi as api
 from token_serializer import TokenSerializer
 
 class UserRegisterResource(Resource):

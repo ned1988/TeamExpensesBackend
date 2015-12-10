@@ -1,4 +1,7 @@
 class Constants:
+    def __init__(self):
+        pass
+
     @staticmethod
     def error_token_not_valid():
         return 'token_not_valid'
@@ -10,4 +13,3 @@ class Constants:
     @staticmethod
     def error_no_user_id():
         return 'no_user_id'
-

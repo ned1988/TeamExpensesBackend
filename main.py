@@ -4,9 +4,10 @@ from flask_restful import Api
 from flask_passlib import LazyCryptContext
 from flask_passlib.context import (werkzeug_salted_md5, werkzeug_salted_sha1, werkzeug_salted_sha256, werkzeug_salted_sha512)
 
+from SharedModels import db, passlib
+from SharedModels import api as docuApi
 from UserAllResource import UserAllResource
 from EventAllResource import EventAllResource
-from SharedModels import db, docuApi, passlib
 from user_login_resource import UserLoginResource
 from UserRegisterResource import UserRegisterResource
 from user_get_info_resource import UserGetInfoResource

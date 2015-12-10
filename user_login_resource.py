@@ -2,9 +2,9 @@ from flask import request
 from flask_restful import Resource
 
 from SharedModels import db
+from SharedModels import api
 from SharedModels import passlib
 from PersonModel import PersonModel
-from SharedModels import docuApi as api
 from token_serializer import TokenSerializer
 
 class UserLoginResource(Resource):

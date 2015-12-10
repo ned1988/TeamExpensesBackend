@@ -1,6 +1,6 @@
+from SharedModels import api
 from PersonModel import PersonModel
 from base_resource import BaseResource
-from SharedModels import docuApi as api
 
 class UserGetInfoResource(BaseResource):
     parser = api.parser()
