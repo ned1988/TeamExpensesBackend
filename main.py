@@ -7,6 +7,7 @@ from flask_passlib.context import (werkzeug_salted_md5, werkzeug_salted_sha1, we
 from UserAllResource import UserAllResource
 from EventAllResource import EventAllResource
 from UserRegisterResource import UserRegisterResource
+from user_get_info_resource import UserGetInfoResource
 from SharedModels import db, docuApi, passlib, token_secretKey
 
 # Create Flas application
@@ -34,11 +35,15 @@ passlib.init_app(app, context=LazyCryptContext(
     default='werkzeug_salted_sha512',))
 
 api.add_resource(EventAllResource, '/event/all')
-docuApi.add_resource(EventAllResource, '/event/all')
 
 api.add_resource(UserAllResource, '/user/all')
-docuApi.add_resource(UserAllResource, '/user/all')
+api.add_resource(UserGetInfoResource, '/user/id')
 api.add_resource(UserRegisterResource, '/user/register')
+
+docuApi.add_resource(EventAllResource, '/event/all')
+
+docuApi.add_resource(UserAllResource, '/user/all')
+docuApi.add_resource(UserGetInfoResource, '/user/id')
 docuApi.add_resource(UserRegisterResource, '/user/register')
 
 db.init_app(app)

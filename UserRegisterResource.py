@@ -9,34 +9,32 @@ from token_serializer import TokenSerializer
 class UserRegisterResource(Resource):
     parser = api.parser()
     parser.add_argument('facebookID', type=str, help='Facebook ID', location='form')
-    parser.add_argument('email', type=str, help='User email', location='form', required = True)
-    parser.add_argument('firstName', type=str, help='First Name', location='form', required = True)
-    parser.add_argument('lastName', type=str, help='Last Name', location='form', required = True)
-    parser.add_argument('password', type=str, help='Password', location='form', required = True)
+    parser.add_argument('email', type=str, help='User email', location='form', required=True)
+    parser.add_argument('firstName', type=str, help='First Name', location='form', required=True)
+    parser.add_argument('lastName', type=str, help='Last Name', location='form', required=True)
+    parser.add_argument('password', type=str, help='Password', location='form', required=True)
     @api.doc(parser=parser)
     def post(self):
-        personModel = PersonModel()
+        person_model = PersonModel()
 
-        personModel.facebook_id = request.form['facebookID']
-        personModel.email = request.form['email']
-        personModel.first_name = request.form['firstName']
-        personModel.last_name = request.form['lastName']
+        person_model.facebook_id = request.form['facebookID']
+        person_model.email = request.form['email']
+        person_model.first_name = request.form['firstName']
+        person_model.last_name = request.form['lastName']
 
         # Encrypt user password
         password = request.form['password']
         encr_password = passlib.encrypt(password, salt_length=100)
-        personModel.password = encr_password
-
-        # Add person to the model
-        db.session.add(personModel)
-        db.session.commit()
-
-        json_object = personModel.to_dict()
+        person_model.password = encr_password
 
         # Generate user token with expiration date
-        json_object[ 'token' ] = TokenSerializer.generate_auth_token(personModel.person_id)
+        person_model.token = TokenSerializer.generate_auth_token(person_model.person_id)
 
-        return personModel.to_dict()
+        # Add person to the model
+        db.session.add(person_model)
+        db.session.commit()
+
+        return person_model.to_dict()
 
     parser = api.parser()
     parser.add_argument('userID', type=int, help='User ID', location='form', required = True)

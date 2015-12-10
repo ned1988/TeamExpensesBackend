@@ -9,6 +9,7 @@ class PersonModel(db.Model):
     email = db.Column(db.Text)
     facebook_id = db.Column(db.Text)
     password = db.Column(db.Text)
+    token = db.Column(db.Text)
 
     def to_dict(self):
         json_object = {'personID': self.person_id,
@@ -16,6 +17,7 @@ class PersonModel(db.Model):
                        'lastName': self.last_name,
                        'email': self.email,
                        'facebookID': self.facebook_id,
+                       'token': self.token,
                        }
 
         return json_object
