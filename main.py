@@ -6,12 +6,12 @@ from flask_passlib.context import (werkzeug_salted_md5, werkzeug_salted_sha1, we
 
 from UserAllResource import UserAllResource
 from EventAllResource import EventAllResource
+from SharedModels import db, docuApi, passlib
 from user_login_resource import UserLoginResource
 from UserRegisterResource import UserRegisterResource
 from user_get_info_resource import UserGetInfoResource
-from SharedModels import db, docuApi, passlib, token_secretKey
 
-# Create Flas application
+# Create Flask application
 app = Flask(__name__)
 app.config.SWAGGER_UI_DOC_EXPANSION = 'list'
 
@@ -35,17 +35,21 @@ passlib.init_app(app, context=LazyCryptContext(
     ],
     default='werkzeug_salted_sha512',))
 
+# Resources
+
 api.add_resource(EventAllResource, '/event/all')
 
 api.add_resource(UserAllResource, '/user/all')
-api.add_resource(UserGetInfoResource, '/user/id')
+api.add_resource(UserGetInfoResource, '/user')
 api.add_resource(UserLoginResource, '/user/login')
 api.add_resource(UserRegisterResource, '/user/register')
+
+# REST API documentation
 
 docuApi.add_resource(EventAllResource, '/event/all')
 
 docuApi.add_resource(UserAllResource, '/user/all')
-docuApi.add_resource(UserGetInfoResource, '/user/id')
+docuApi.add_resource(UserGetInfoResource, '/user')
 docuApi.add_resource(UserLoginResource, '/user/login')
 docuApi.add_resource(UserRegisterResource, '/user/register')
 
