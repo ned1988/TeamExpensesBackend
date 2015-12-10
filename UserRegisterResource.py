@@ -16,9 +16,13 @@ class UserRegisterResource(Resource):
     @api.doc(parser=parser)
     def post(self):
         person_model = PersonModel()
+        person_model.email = request.form['email']
+
+        items = PersonModel.query.filter_by(email=person_model.email).all()
+        if len(items) > 0:
+            return {'status': 'user_is_already_exist'}, 401
 
         person_model.facebook_id = request.form['facebookID']
-        person_model.email = request.form['email']
         person_model.first_name = request.form['firstName']
         person_model.last_name = request.form['lastName']
 
