@@ -7,17 +7,10 @@ from constants import Constants
 from PersonModel import PersonModel
 from token_serializer import TokenSerializer
 
+
 class BaseResource(Resource):
-    def check_user_credentials(self):
-        # Get userID from URL query
-        request_parser = reqparse.RequestParser()
-        request_parser.add_argument('userID', type=str)
-        args = request_parser.parse_args()
-        user_id = args['userID']
-
-        # Get user token from HTTP header
-        token = request.headers.get('userToken')
-
+    @staticmethod
+    def check_user_credentials_with_credentials(user_id, token):
         # Check token status
         status = TokenSerializer.verify_auth_token(token, user_id)
 
@@ -34,7 +27,7 @@ class BaseResource(Resource):
         person_model = PersonModel.query.filter_by(person_id=user_id).first()
 
         # Have we user with received ID?
-        if person_model == None:
+        if person_model is None:
             # No we haven't: return error status
             return {'status': Constants.error_no_user_id()}, 400
 
@@ -45,3 +38,16 @@ class BaseResource(Resource):
 
         # If everything is Ok - return person model
         return person_model
+
+    @staticmethod
+    def check_user_credentials():
+        # Get userID from URL query
+        request_parser = reqparse.RequestParser()
+        request_parser.add_argument('userID', type=str)
+        args = request_parser.parse_args()
+        user_id = args['userID']
+
+        # Get user token from HTTP header
+        token = request.headers.get('userToken')
+
+        return BaseResource.check_user_credentials_with_credentials(user_id, token)

@@ -7,10 +7,12 @@ from SharedModels import passlib
 from PersonModel import PersonModel
 from token_serializer import TokenSerializer
 
+
 class UserLoginResource(Resource):
     parser = api.parser()
     parser.add_argument('email', type=str, help='User email', location='form', required=True)
     parser.add_argument('password', type=str, help='User password', location='form', required=True)
+
     @api.doc(parser=parser)
     def post(self):
         email = request.form['email']

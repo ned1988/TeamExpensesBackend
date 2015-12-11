@@ -1,10 +1,10 @@
 from flask_restful import Resource
-from SharedModels import docuApi
+from SharedModels import api
 
 class EventAllResource(Resource):
     def get(self):
         return {"event" : "all"}
 
-    @docuApi.doc(responses={403: 'Not Authorized'})
+    @api.doc(responses={403: 'Not Authorized'})
     def post(self, id):
-        docuApi.abort(403)
+        api.abort(403)

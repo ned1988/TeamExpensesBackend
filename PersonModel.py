@@ -1,6 +1,5 @@
-__author__ = 'Denys.Meloshyn'
-
 from SharedModels import db
+
 
 class PersonModel(db.Model):
     person_id = db.Column(db.Integer, primary_key=True)
