@@ -24,6 +24,7 @@ class EventCreateResource(BaseResource):
             return model
 
         event_model = EventModel()
+        event_model.creator_id = user_id
         event_model.title = request.form['title']
 
         # Add person to the model
