@@ -11,6 +11,7 @@ from SharedModels import db, passlib
 from SharedModels import api as docu_api
 from UserAllResource import UserAllResource
 from EventAllResource import EventAllResource
+from time_stamp_resource import TimeStampResource
 from user_login_resource import UserLoginResource
 from event_create_resource import EventCreateResource
 from UserRegisterResource import UserRegisterResource
@@ -43,6 +44,8 @@ passlib.init_app(app, context=LazyCryptContext(
 
 # Resources
 
+api.add_resource(TimeStampResource, '/timeStamp')
+
 api.add_resource(EventAllResource, '/event/all')
 api.add_resource(EventCreateResource, '/event/create')
 api.add_resource(EventAddTeamMembersResource, '/event/addTeamMembers')
@@ -53,6 +56,8 @@ api.add_resource(UserLoginResource, '/user/login')
 api.add_resource(UserRegisterResource, '/user/register')
 
 # REST API documentation
+
+docu_api.add_resource(TimeStampResource, '/timeStamp')
 
 docu_api.add_resource(EventAllResource, '/event/all')
 docu_api.add_resource(EventCreateResource, '/event/create')

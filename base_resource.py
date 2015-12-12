@@ -17,11 +17,11 @@ class BaseResource(Resource):
         # Is token is expired?
         if status == SignatureExpired:
             # Yes: return error status
-            return {'status': Constants.error_token_expired()}, 401
+            return Constants.error_token_expired()
         # Is toke not valid?
         elif status == BadSignature:
             # Yes: return error status
-            return {'status': Constants.error_token_not_valid()}, 401
+            return Constants.error_token_not_valid()
 
         # Try to find user with received ID
         person_model = PersonModel.query.filter_by(person_id=user_id).first()
@@ -29,12 +29,12 @@ class BaseResource(Resource):
         # Have we user with received ID?
         if person_model is None:
             # No we haven't: return error status
-            return {'status': Constants.error_no_user_id()}, 400
+            return  Constants.error_no_user_id()
 
         # Is received token correct?
         if person_model.token != token:
             # No: return error status
-            return {'status': Constants.error_token_not_valid()}, 401
+            return  Constants.error_token_not_valid()
 
         # If everything is Ok - return person model
         return person_model
