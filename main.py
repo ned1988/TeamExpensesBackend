@@ -15,6 +15,7 @@ from user_login_resource import UserLoginResource
 from event_create_resource import EventCreateResource
 from UserRegisterResource import UserRegisterResource
 from user_get_info_resource import UserGetInfoResource
+from event_add_team_members_resource import EventAddTeamMembersResource
 
 # Create Flask application
 app = Flask(__name__)
@@ -44,6 +45,7 @@ passlib.init_app(app, context=LazyCryptContext(
 
 api.add_resource(EventAllResource, '/event/all')
 api.add_resource(EventCreateResource, '/event/create')
+api.add_resource(EventAddTeamMembersResource, '/event/addTeamMembers')
 
 api.add_resource(UserAllResource, '/user/all')
 api.add_resource(UserGetInfoResource, '/user')
@@ -54,6 +56,7 @@ api.add_resource(UserRegisterResource, '/user/register')
 
 docu_api.add_resource(EventAllResource, '/event/all')
 docu_api.add_resource(EventCreateResource, '/event/create')
+docu_api.add_resource(EventAddTeamMembersResource, '/event/addTeamMembers')
 
 docu_api.add_resource(UserAllResource, '/user/all')
 docu_api.add_resource(UserGetInfoResource, '/user')
