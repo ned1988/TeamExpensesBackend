@@ -39,15 +39,3 @@ class UserRegisterResource(Resource):
         db.session.commit()
 
         return person_model.to_dict()
-
-    parser = api.parser()
-    parser.add_argument('userID', type=int, help='User ID', location='form', required = True)
-    parser.add_argument('token', type=str, help='User token', location='form', required = True)
-    parser.add_argument('facebookID', type=str, help='Facebook ID', location='form')
-    parser.add_argument('facebookID', type=str, help='Facebook ID', location='form')
-    parser.add_argument('email', type=str, help='User email', location='form')
-    parser.add_argument('firstName', type=str, help='First Name', location='form')
-    parser.add_argument('lastName', type=str, help='Last Name', location='form')
-    @api.doc(parser=parser)
-    def put(self):
-        return {"event" : "all"}

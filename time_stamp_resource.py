@@ -7,7 +7,7 @@ from base_resource import BaseResource
 class TimeStampResource(BaseResource):
     parser = api.parser()
     parser.add_argument('userID', type=int, help='User ID', location='headers', required=True)
-    parser.add_argument('timeStamp', type=str, help='Time Stamp', location='headers', required=True)
+    parser.add_argument('dataVersion', type=int, help='Data Version', location='headers', required=True)
     # parser.add_argument('userToken', type=str, help='User token', location='headers', required=True)
 
     @api.doc(parser=parser)
@@ -22,8 +22,8 @@ class TimeStampResource(BaseResource):
         #     # Some error happens here
         #     return model
 
-        time_stamp = parse(request.headers.get('timeStamp'))
-        items = EventModel.time_stamp_difference(user_id, time_stamp)
+        data_version = parse(request.headers.get('data_version'))
+        items = EventModel.data_version(user_id, data_version)
 
         result = []
         for model in items:

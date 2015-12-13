@@ -1,24 +1,27 @@
 from SharedModels import db
 from datetime import datetime
+from data_version_model import DataVersionModel
 
 
 class EventModel(db.Model):
     def __init__(self):
         self.sum = 0.0
         self.creation_date = datetime.utcnow()
-        self.time_stamp = self.creation_date
+        self.data_version = db.connecttion.execute(DataVersionModel.data_version_id_seq)
+        print self.data_version
 
     event_id = db.Column(db.Integer, primary_key=True)
+    title = db.Column(db.Text)
     creator_id = db.Column(db.Integer)
     creation_date = db.Column(db.DateTime)
     end_date = db.Column(db.DateTime)
-    time_stamp = db.Column(db.DateTime)
     sum = db.Column(db.Float)
-    title = db.Column(db.Text)
+    data_version = db.Column(db.Integer)
+
 
     @classmethod
-    def time_stamp_difference(self, user_id, time_stamp):
-        items = EventModel.query.filter(EventModel.time_stamp > time_stamp).all()
+    def data_version_difference(self, user_id, data_version):
+        items = EventModel.query.filter(EventModel.data_version > data_version).all()
 
         return items
 

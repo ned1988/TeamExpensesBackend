@@ -1,4 +1,4 @@
-# import os
+import os
 from flask import Flask
 from flask_restful import Api
 from flask_passlib import LazyCryptContext
@@ -9,7 +9,6 @@ from flask_passlib.context import werkzeug_salted_sha512
 
 from SharedModels import db, passlib
 from SharedModels import api as docu_api
-from UserAllResource import UserAllResource
 from EventAllResource import EventAllResource
 from time_stamp_resource import TimeStampResource
 from user_login_resource import UserLoginResource
@@ -22,8 +21,8 @@ from event_add_team_members_resource import EventAddTeamMembersResource
 app = Flask(__name__)
 app.config.SWAGGER_UI_DOC_EXPANSION = 'list'
 
-# app.config['SQLALCHEMY_DATABASE_URI'] = os.environ['DATABASE_URL']
-app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///teamExpenses.db'
+app.config['SQLALCHEMY_DATABASE_URI'] = os.environ['DATABASE_URL']
+# app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///teamExpenses.db'
 
 # Create Restful API
 api = Api(app)
@@ -50,7 +49,6 @@ api.add_resource(EventAllResource, '/event/all')
 api.add_resource(EventCreateResource, '/event/create')
 api.add_resource(EventAddTeamMembersResource, '/event/addTeamMembers')
 
-api.add_resource(UserAllResource, '/user/all')
 api.add_resource(UserGetInfoResource, '/user')
 api.add_resource(UserLoginResource, '/user/login')
 api.add_resource(UserRegisterResource, '/user/register')
@@ -63,7 +61,6 @@ docu_api.add_resource(EventAllResource, '/event/all')
 docu_api.add_resource(EventCreateResource, '/event/create')
 docu_api.add_resource(EventAddTeamMembersResource, '/event/addTeamMembers')
 
-docu_api.add_resource(UserAllResource, '/user/all')
 docu_api.add_resource(UserGetInfoResource, '/user')
 docu_api.add_resource(UserLoginResource, '/user/login')
 docu_api.add_resource(UserRegisterResource, '/user/register')
