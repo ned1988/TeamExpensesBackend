@@ -7,10 +7,7 @@ class EventModel(db.Model):
     def __init__(self):
         self.sum = 0.0
         self.creation_date = datetime.utcnow()
-
-        version = DataVersionModel()
-        self.data_version = version.data_version()
-        print self.data_version
+        self.data_version = DataVersionModel.data_version()
 
     event_id = db.Column(db.Integer, primary_key=True)
     title = db.Column(db.Text)

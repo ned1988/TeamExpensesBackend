@@ -22,9 +22,10 @@ from event_add_team_members_resource import EventAddTeamMembersResource
 app = Flask(__name__)
 app.config.SWAGGER_UI_DOC_EXPANSION = 'list'
 
-# app.config['SQLALCHEMY_DATABASE_URI'] = os.environ['DATABASE_URL']
+os.environ.setdefault("DATABASE_URL", "postgresql://localhost/Denys.Meloshyn")
+
+app.config['SQLALCHEMY_DATABASE_URI'] = os.environ['DATABASE_URL']
 # app.config['SQLALCHEMY_DATABASE_URI'] = 'postgresql:///teamExpenses.db'
-app.config['SQLALCHEMY_DATABASE_URI'] = 'postgresql://localhost/Denys.Meloshyn'
 
 # Create Restful API
 api = Api(app)
