@@ -7,7 +7,9 @@ class EventModel(db.Model):
     def __init__(self):
         self.sum = 0.0
         self.creation_date = datetime.utcnow()
-        self.data_version = db.connecttion.execute(DataVersionModel.data_version_id_seq)
+
+        version = DataVersionModel()
+        self.data_version = version.data_version()
         print self.data_version
 
     event_id = db.Column(db.Integer, primary_key=True)
@@ -30,6 +32,7 @@ class EventModel(db.Model):
                        'creatorID': self.creator_id,
                        'sum': self.sum,
                        'title': self.title,
+                       'data_version': self.data_version
                        }
 
         if self.creation_date is None:
@@ -41,10 +44,5 @@ class EventModel(db.Model):
             json_object['endDate'] = None
         else:
             json_object['endDate'] = self.end_date.isoformat()
-
-        if self.time_stamp is None:
-            json_object['time_stamp'] = None
-        else:
-            json_object['time_stamp'] = self.time_stamp.isoformat()
 
         return json_object
