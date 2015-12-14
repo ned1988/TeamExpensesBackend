@@ -22,7 +22,9 @@ class PersonModel(db.Model):
                        'email': self.email,
                        'facebookID': self.facebook_id,
                        'token': self.token,
-                       'time_stamp': self.time_stamp.isoformat()
                        }
+
+        if not self.time_stamp is None:
+            json_object['time_stamp'] = self.time_stamp.isoformat()
 
         return json_object
