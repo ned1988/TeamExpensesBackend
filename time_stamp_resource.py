@@ -22,8 +22,10 @@ class TimeStampResource(BaseResource):
         #     # Some error happens here
         #     return model
 
-        data_version = parse(request.headers.get('data_version'))
-        items = EventModel.data_version(user_id, data_version)
+        data_version = request.headers.get('dataVersion')
+        items = EventModel.data_version_difference(user_id, data_version)
+
+        # print items
 
         result = []
         for model in items:

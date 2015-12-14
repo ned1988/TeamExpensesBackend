@@ -1,7 +1,6 @@
 import os
 from flask import Flask
 from flask_restful import Api
-from sqlalchemy import create_engine
 from flask_passlib import LazyCryptContext
 from flask_passlib.context import werkzeug_salted_md5
 from flask_passlib.context import werkzeug_salted_sha1
@@ -18,19 +17,18 @@ from UserRegisterResource import UserRegisterResource
 from user_get_info_resource import UserGetInfoResource
 from event_add_team_members_resource import EventAddTeamMembersResource
 
+os.environ.setdefault("DATABASE_URL", "postgresql://localhost/Denys.Meloshyn")
+
 # Create Flask application
 app = Flask(__name__)
 app.config.SWAGGER_UI_DOC_EXPANSION = 'list'
 
-os.environ.setdefault("DATABASE_URL", "postgresql://localhost/Denys.Meloshyn")
-
 app.config['SQLALCHEMY_DATABASE_URI'] = os.environ['DATABASE_URL']
-# app.config['SQLALCHEMY_DATABASE_URI'] = 'postgresql:///teamExpenses.db'
 
 # Create Restful API
 api = Api(app)
 
-# Create REST API docimentation
+# Create REST API documentation
 docu_api.init_app(app)
 
 # token_secretKey.replace(token_secretKey, app.config['SECRET_KEY'])
@@ -73,17 +71,6 @@ db.init_app(app)
 with app.app_context():
     # Extensions like Flask-SQLAlchemy now know what the "current" app
     db.create_all()
-
-    # engine = create_engine(app.config['SQLALCHEMY_DATABASE_URI'])
-    # connection = engine.connect()
-    # seq = db.Sequence('serial')
-    # nextid = engine.connect().execute(seq)
-    # print nextid
-    #
-    # connection.execute("CREATE SEQUENCE data_version START 0")
-    # seq = db.Sequence('data_version')
-    # nextid = engine.connect().execute(seq)
-    # print nextid
 
 if __name__ == '__main__':
     app.run(debug=True)
