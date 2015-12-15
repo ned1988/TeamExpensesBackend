@@ -1,20 +1,22 @@
 from flask import request
+from flask_restful import reqparse
 
 from SharedModels import db
 from SharedModels import api
 from event_model import EventModel
-from PersonModel import PersonModel
 from base_resource import BaseResource
 
 
 class EventCreateResource(BaseResource):
     parser = api.parser()
-    # parser.add_argument('userID', type=int, help='User ID', location='form', required=True)
+    parser.add_argument('userID', type=int, help='User ID', location='form', required=True)
     parser.add_argument('title', type=str, help='Event title', location='form', required=True)
-    # parser.add_argument('userToken', type=str, help='User token', location='form', required=True)
+    parser.add_argument('userToken', type=str, help='User token', location='form', required=True)
 
     @api.doc(parser=parser)
     def post(self):
+        args = api.parser().parse_args()
+
         # user_id = request.form['userID']
         # token = request.form['userToken']
         #

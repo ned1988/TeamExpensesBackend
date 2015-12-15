@@ -1,4 +1,5 @@
-from flask import request
+import json
+from flask_restful import reqparse
 
 from SharedModels import api
 from constants import Constants
@@ -8,33 +9,37 @@ from base_resource import BaseResource
 
 class SynchroniseResponse(BaseResource):
     parser = api.parser()
-    parser.add_argument('userID', type=int, help='User ID', location='form', required=True)
-    parser.add_argument('timeStamp', type=str, help='Time Stamp', location='form', required=True)
+    parser.add_argument('userID', type=str, help='User ID', location='form', required=True)
+    parser.add_argument('userData', type=str, help='User Data', location='form', required=True)
     parser.add_argument('userToken', type=str, help='User Token', location='form', required=True)
 
     @api.doc(parser=parser)
-    def get(self):
-        keys = request.headers.keys()
+    def post(self):
+        parser = reqparse.RequestParser()
+        parser.add_argument('userID', type=str, help='User ID', location='form', required=True)
+        parser.add_argument('userData', type=str, help='User Data', location='form', required=True)
+        parser.add_argument('userToken', type=str, help='User Token', location='form', required=True)
+        args = parser.parse_args()
 
-        parameter = 'userID'
-        if parameter not in keys:
-            return Constants.error_missed_parameter(parameter)
-
-        parameter = 'userToken'
-        if parameter not in keys:
-            return Constants.error_missed_parameter(parameter)
-
-        parameter = 'timeStamp'
-        if parameter not in keys:
-            return Constants.error_missed_parameter(parameter)
-
-        user_id = request.headers.get('userID')
-        token = request.headers.get('userToken')
+        user_id = args['userID']
+        token = args['userToken']
 
         model = BaseResource.check_user_credentials_with_credentials(user_id, token)
 
         if not isinstance(model, PersonModel):
             # Some error happens here
             return model
+
+        json_data = args['userData']
+
+        try:
+            json_data = json.loads(json_data)
+        except ValueError:
+            return Constants.error_wrong_json_format()
+
+        if not isinstance(json_data, list):
+            return Constants.error_wrong_json_structure()
+
+
 
         return {}

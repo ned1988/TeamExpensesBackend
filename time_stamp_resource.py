@@ -1,9 +1,7 @@
-from flask import request
 from dateutil.parser import parse
 from flask_restful import reqparse
 
 from SharedModels import api
-from constants import Constants
 from event_model import EventModel
 from PersonModel import PersonModel
 from base_resource import BaseResource
@@ -22,24 +20,9 @@ class TimeStampResource(BaseResource):
         parser.add_argument('timeStamp', type=str, help='Time Stamp', location='headers', required=True)
         parser.add_argument('userToken', type=str, help='User token', location='headers', required=True)
 
-        keys = parser.parse_args()
-
-        print keys
-
-        parameter = 'userID'
-        if parameter not in keys:
-            return Constants.error_missed_parameter(parameter)
-
-        parameter = 'userToken'
-        if parameter not in keys:
-            return Constants.error_missed_parameter(parameter)
-
-        parameter = 'timeStamp'
-        if parameter not in keys:
-            return Constants.error_missed_parameter(parameter)
-
-        user_id = request.headers.get('userID')
-        token = request.headers.get('userToken')
+        args = parser.parse_args()
+        user_id = args['userID']
+        token = args['userToken']
 
         model = BaseResource.check_user_credentials_with_credentials(user_id, token)
 
@@ -47,7 +30,7 @@ class TimeStampResource(BaseResource):
             # Some error happens here
             return model
 
-        time_stamp = parse(request.headers.get('timeStamp'))
+        time_stamp = parse(args['timeStamp'])
         items = EventModel.time_stamp_difference(user_id, time_stamp)
 
         result = []
