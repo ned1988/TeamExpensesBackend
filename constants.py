@@ -21,3 +21,11 @@ class Constants:
     @staticmethod
     def error_wrong_json_structure():
         return {'status': 'wrong_json_structure'}, 401
+
+    @staticmethod
+    def error_missed_parameter(parameter):
+        return {'status': 'missed_parameter' + parameter}, 401
+
+    @staticmethod
+    def error_with_message_and_status(message, status):
+        return {'status': message}, status

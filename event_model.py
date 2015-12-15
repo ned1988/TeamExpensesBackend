@@ -18,8 +18,7 @@ class EventModel(db.Model):
     data_version = db.Column(db.Integer)
 
     @classmethod
-    def data_version_difference(sefl, user_id, data_version):
-        print data_version
+    def data_version_difference(sefl, data_version):
         items = EventModel.query.filter(EventModel.data_version > data_version).all()
 
         return items
