@@ -1,5 +1,5 @@
+import datetime
 from SharedModels import db
-from datetime import datetime
 
 
 class EventModel(db.Model):
@@ -17,10 +17,11 @@ class EventModel(db.Model):
     time_stamp = db.Column(db.DateTime)
 
     @classmethod
-    def data_version_difference(self, user_id, data_version):
-        items = EventModel.query.filter(EventModel.data_version > data_version).all()
+    def time_stamp_difference(self, user_id, time_stamp):
+        items = EventModel.query.filter(EventModel.creator_id == user_id,
+                                        EventModel.time_stamp > time_stamp).all()
 
-        return {}
+        return [model.to_dict() for model in items]
 
     def to_dict(self):
         json_object = {'eventID': self.event_id,
@@ -29,13 +30,13 @@ class EventModel(db.Model):
                        'title': self.title,
                        }
 
-        if not self.creation_date is None:
+        if self.creation_date is not None:
             json_object['creationDate'] = self.creation_date.isoformat()
 
-        if not self.end_date is None:
+        if self.end_date is not None:
             json_object['endDate'] = self.end_date.isoformat()
 
-        if not self.time_stamp is None:
+        if self.time_stamp is not None:
             json_object['timeStamp'] = self.time_stamp.isoformat()
 
         return json_object

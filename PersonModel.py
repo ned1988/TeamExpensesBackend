@@ -1,5 +1,5 @@
+import datetime
 from SharedModels import db
-from datetime import datetime
 
 
 class PersonModel(db.Model):
