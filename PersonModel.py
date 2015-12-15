@@ -1,10 +1,10 @@
 from SharedModels import db
-from data_version_model import DataVersionModel
+from datetime import datetime
 
 
 class PersonModel(db.Model):
     def __init__(self):
-        self.data_version = DataVersionModel.data_version()
+        self.time_stamp = datetime.utcnow()
 
     person_id = db.Column(db.Integer, primary_key=True)
     first_name = db.Column(db.Text)
@@ -13,7 +13,7 @@ class PersonModel(db.Model):
     facebook_id = db.Column(db.Text)
     password = db.Column(db.Text)
     token = db.Column(db.Text)
-    data_version = db.Column(db.Integer)
+    time_stamp = db.Column(db.DateTime)
 
     def to_dict(self):
         json_object = {'personID': self.person_id,
@@ -22,7 +22,9 @@ class PersonModel(db.Model):
                        'email': self.email,
                        'facebookID': self.facebook_id,
                        'token': self.token,
-                       'data_version': self.data_version
                        }
+
+        if not self.time_stamp is None:
+            json_object['time_stamp'] = self.time_stamp.isoformat()
 
         return json_object

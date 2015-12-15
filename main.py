@@ -17,7 +17,7 @@ from UserRegisterResource import UserRegisterResource
 from user_get_info_resource import UserGetInfoResource
 from event_add_team_members_resource import EventAddTeamMembersResource
 
-os.environ.setdefault("DATABASE_URL", "postgresql://localhost/Denys.Meloshyn")
+os.environ.setdefault("DATABASE_URL", "postgresql://localhost/postgres")
 
 # Create Flask application
 app = Flask(__name__)

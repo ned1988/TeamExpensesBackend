@@ -1,4 +1,5 @@
 from flask import request
+from dateutil.parser import parse
 
 from SharedModels import api
 from constants import Constants
@@ -9,7 +10,7 @@ from base_resource import BaseResource
 class TimeStampResource(BaseResource):
     parser = api.parser()
     parser.add_argument('userID', type=int, help='User ID', location='headers', required=True)
-    parser.add_argument('dataVersion', type=int, help='Data Version', location='headers', required=True)
+    parser.add_argument('timeStamp', type=str, help='Time Stamp', location='headers', required=True)
     parser.add_argument('userToken', type=str, help='User token', location='headers', required=True)
 
     @api.doc(parser=parser)
@@ -24,7 +25,7 @@ class TimeStampResource(BaseResource):
         if not parameter in keys:
             return Constants.error_missed_parameter(parameter)
 
-        parameter = 'dataVersion'
+        parameter = 'timeStamp'
         if not parameter in keys:
             return Constants.error_missed_parameter(parameter)
 
@@ -37,8 +38,8 @@ class TimeStampResource(BaseResource):
             # Some error happens here
             return model
 
-        data_version = request.headers.get('dataVersion')
-        items = EventModel.data_version_difference(user_id, data_version)
+        time_stamp = parse(request.headers.get('timeStamp'))
+        items = EventModel.data_version(user_id, time_stamp)
 
         result = []
         for model in items:
