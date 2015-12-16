@@ -30,11 +30,14 @@ class TimeStampResource(BaseResource):
             # Some error happens here
             return model
 
-        time_stamp = parse(args['timeStamp'])
-        items = EventModel.time_stamp_difference(user_id, time_stamp)
+        time = args['timeStamp']
+        time_stamp = None
+        if len(time) > 0:
+            time_stamp = parse(time)
 
-        result = []
-        for model in items:
-            result.append(model.to_dict())
+        items = EventModel.time_stamp_difference(user_id, time_stamp)
+        print items
+        result = [result_model.to_dict() for result_model in items]
+        print result
 
         return result
