@@ -1,6 +1,8 @@
-import datetime
+from datetime import datetime
+
 from SharedModels import db
 
+k_event_id = 'eventID'
 
 class EventModel(db.Model):
     def __init__(self):
@@ -9,7 +11,7 @@ class EventModel(db.Model):
         self.creation_date = datetime.utcnow()
         self.time_stamp = self.creation_date
 
-    event_id = db.Column(db.Integer, primary_key=True)
+    event_id = db.Column(db.Text, primary_key=True)
     title = db.Column(db.Text)
     creator_id = db.Column(db.Integer)
     creation_date = db.Column(db.DateTime)
@@ -25,13 +27,28 @@ class EventModel(db.Model):
 
         return [model.to_dict() for model in items]
 
+    @classmethod
+    def find_event(self, event_id):
+        items = EventModel.query.filter_by(event_id=event_id).all()
+
+        if len(items) > 0:
+            return items[0]
+
+        return None
+
+    def configure_with_dict(self, dict):
+        self.event_id = dict[k_event_id]
+
+        # Update time stamp value
+        self.time_stamp = datetime.utcnow()
+
     def to_dict(self):
         json_object = {'sum': self.sum}
 
         json_object['title'] = self.title
         json_object['eventID'] = self.event_id
         json_object['creatorID'] = self.creator_id
-        json_object['is_removed'] = self.is_removed
+        json_object['isRemoved'] = self.is_removed
 
         if self.creation_date is not None:
             json_object['creationDate'] = self.creation_date.isoformat()
