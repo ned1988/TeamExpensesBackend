@@ -1,17 +1,19 @@
 from datetime import datetime
+from dateutil.parser import parse
 
 from SharedModels import db
 
+k_title = 'title'
 k_event_id = 'eventID'
+k_internal_event_id = 'internalEventID'
 
 
 class EventModel(db.Model):
     def __init__(self):
         self.is_removed = False
-        self.creation_date = datetime.utcnow()
-        self.time_stamp = self.creation_date
+        self.time_stamp = datetime.utcnow()
 
-    event_id = db.Column(db.Text, primary_key=True)
+    event_id = db.Column(db.Integer, primary_key=True)
     title = db.Column(db.Text)
     creator_id = db.Column(db.Integer)
     creation_date = db.Column(db.DateTime)
@@ -39,7 +41,13 @@ class EventModel(db.Model):
         return None
 
     def configure_with_dict(self, dict_model):
-        self.event_id = dict_model[k_event_id]
+        value = dict_model.get(k_title)
+        if value is not None:
+            self.title = value
+
+        value = dict_model.get('creationDate')
+        if value is not None:
+            self.creation_date = parse(value)
 
         # Update time stamp value
         self.time_stamp = datetime.utcnow()

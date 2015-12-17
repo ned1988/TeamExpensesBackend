@@ -1,3 +1,4 @@
+from datetime import datetime
 from dateutil.parser import parse
 from flask_restful import reqparse
 
@@ -36,8 +37,13 @@ class TimeStampResource(BaseResource):
             time_stamp = parse(time)
 
         items = EventModel.time_stamp_difference(user_id, time_stamp)
-        print items
         result = [result_model.to_dict() for result_model in items]
-        print result
 
-        return result
+        response = dict()
+        time_stamp = datetime.utcnow()
+        response['timeStamp'] = time_stamp.isoformat()
+        response['result'] = result
+
+        print response
+
+        return response
