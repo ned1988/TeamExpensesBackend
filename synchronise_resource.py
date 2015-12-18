@@ -43,6 +43,8 @@ class SynchroniseResponse(BaseResource):
         if not isinstance(json_data, list):
             return Constants.error_wrong_json_structure()
 
+        print json_data
+
         result = []
         for event_dict in json_data:
             if isinstance(event_dict, dict):
@@ -67,8 +69,6 @@ class SynchroniseResponse(BaseResource):
                 result.append(event_json)
 
         print json_data
-
-
 
         time_stamp = datetime.utcnow()
         response = dict()

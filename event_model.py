@@ -49,8 +49,9 @@ class EventModel(db.Model):
         if value is not None:
             self.creation_date = parse(value)
 
-        # Update time stamp value
-        self.time_stamp = datetime.utcnow()
+        value = dict_model.get('timeStamp')
+        if value is not None:
+            self.time_stamp = parse(value)
 
     def to_dict(self):
         json_object = dict()
