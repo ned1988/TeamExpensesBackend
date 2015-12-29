@@ -48,14 +48,15 @@ class SynchroniseResponse(BaseResource):
         result = []
         for event_dict in json_data:
             if isinstance(event_dict, dict):
+                # Remember internal event ID
                 internal_id = event_dict.get(k_internal_event_id, None)
 
                 if internal_id is not None:
                     event_model = EventModel()
+                    event_model.creator_id = user_id
                 else:
                     event_model = EventModel.find_event(event_dict[k_event_id])
 
-                event_model.creator_id = user_id
                 event_model.configure_with_dict(event_dict)
 
                 # Add person to the model
@@ -63,6 +64,8 @@ class SynchroniseResponse(BaseResource):
                 db.session.commit()
 
                 event_json = event_model.to_dict()
+
+                # Append received internal ID to the response
                 if internal_id is not None:
                     event_json[k_internal_event_id] = internal_id
 

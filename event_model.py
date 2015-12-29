@@ -1,7 +1,10 @@
 from datetime import datetime
 from dateutil.parser import parse
+from sqlalchemy.orm import relationship
 
 from SharedModels import db
+from expense_model import ExpenseModel
+from expense_model import k_expense_id
 
 k_title = 'title'
 k_event_id = 'eventID'
@@ -9,6 +12,8 @@ k_internal_event_id = 'internalEventID'
 
 
 class EventModel(db.Model):
+    __tablename__ = 'event_model'
+
     def __init__(self):
         self.is_removed = False
         self.time_stamp = datetime.utcnow()
@@ -53,11 +58,25 @@ class EventModel(db.Model):
         if value is not None:
             self.time_stamp = parse(value)
 
+        value = dict_model.get('expenses')
+        if value is not None and isinstance(value, list):
+            result = list(self.expenses)
+            for expense_dict in value:
+                expense_id = expense_dict.get(k_expense_id)
+
+                expense = ExpenseModel.find_expense(expense_id)
+                expense.configure_with_dict(expense_dict)
+
+                result.append(expense)
+
+            self.expenses = result
+
+
     def to_dict(self):
         json_object = dict()
 
         json_object['title'] = self.title
-        json_object['eventID'] = self.event_id
+        json_object[k_event_id] = self.event_id
         json_object['creatorID'] = self.creator_id
         json_object['isRemoved'] = self.is_removed
 
@@ -71,3 +90,5 @@ class EventModel(db.Model):
             json_object['timeStamp'] = self.time_stamp.isoformat()
 
         return json_object
+
+EventModel.expenses = relationship("ExpenseModel", order_by=ExpenseModel.expense_id, back_populates="event_model")
