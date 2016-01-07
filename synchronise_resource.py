@@ -7,7 +7,7 @@ from SharedModels import api
 from constants import Constants
 from PersonModel import PersonModel
 from base_resource import BaseResource
-from event_model import EventModel, k_internal_event_id, k_event_id
+from event_model import EventModel, k_event_id
 
 
 class SynchroniseResponse(BaseResource):
@@ -48,26 +48,15 @@ class SynchroniseResponse(BaseResource):
         result = []
         for event_dict in json_data:
             if isinstance(event_dict, dict):
-                # Remember internal event ID
-                internal_id = event_dict.get(k_internal_event_id, None)
+                event_model = EventModel.find_event(event_dict[k_event_id])
 
-                if internal_id is not None:
-                    event_model = EventModel()
-                    event_model.creator_id = user_id
-                else:
-                    event_model = EventModel.find_event(event_dict[k_event_id])
-
+                event_model.creator_id = user_id
                 event_model.configure_with_dict(event_dict)
 
-                # Add person to the model
                 db.session.add(event_model)
                 db.session.commit()
 
                 event_json = event_model.to_dict()
-
-                # Append received internal ID to the response
-                if internal_id is not None:
-                    event_json[k_internal_event_id] = internal_id
 
                 result.append(event_json)
 

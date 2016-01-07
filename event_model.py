@@ -8,15 +8,12 @@ from expense_model import k_expense_id
 
 k_title = 'title'
 k_event_id = 'eventID'
-k_internal_event_id = 'internalEventID'
+k_expenses = 'expenses'
+k_internal_event_id = 'internalID'
 
 
 class EventModel(db.Model):
     __tablename__ = 'event_model'
-
-    def __init__(self):
-        self.is_removed = False
-        self.time_stamp = datetime.utcnow()
 
     event_id = db.Column(db.Integer, primary_key=True)
     title = db.Column(db.Text)
@@ -25,6 +22,12 @@ class EventModel(db.Model):
     end_date = db.Column(db.DateTime)
     time_stamp = db.Column(db.DateTime)
     is_removed = db.Column(db.Boolean)
+
+    internal_event_id = None
+
+    def __init__(self):
+        self.is_removed = False
+        self.time_stamp = datetime.utcnow()
 
     @classmethod
     def time_stamp_difference(cls, user_id, time_stamp):
@@ -38,17 +41,24 @@ class EventModel(db.Model):
 
     @classmethod
     def find_event(cls, event_id):
+        if event_id is None:
+            return EventModel()
+
         items = EventModel.query.filter_by(event_id=event_id).all()
 
         if len(items) > 0:
             return items[0]
 
-        return None
+        return EventModel()
 
     def configure_with_dict(self, dict_model):
         value = dict_model.get(k_title)
         if value is not None:
             self.title = value
+
+        value = dict_model.get(k_internal_event_id)
+        if value is not None:
+            self.internal_event_id = value
 
         value = dict_model.get('creationDate')
         if value is not None:
@@ -58,7 +68,7 @@ class EventModel(db.Model):
         if value is not None:
             self.time_stamp = parse(value)
 
-        value = dict_model.get('expenses')
+        value = dict_model.get(k_expenses)
         if value is not None and isinstance(value, list):
             result = list(self.expenses)
             for expense_dict in value:
@@ -88,6 +98,12 @@ class EventModel(db.Model):
 
         if self.time_stamp is not None:
             json_object['timeStamp'] = self.time_stamp.isoformat()
+
+        if self.internal_event_id is not None:
+            json_object[k_internal_event_id] = self.internal_event_id
+
+        expense_items = [model.to_dict() for model in self.expenses]
+        json_object[k_expenses] = expense_items
 
         return json_object
 

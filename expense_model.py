@@ -9,7 +9,7 @@ k_is_removed = 'isRemoved'
 k_time_stamp = 'timeStamp'
 k_expense_id = 'expense_id'
 k_creation_date = 'creationDate'
-k_internal_expense_id = 'internalExpenseID'
+k_internal_expense_id = 'internalID'
 
 
 class ExpenseModel(db.Model):
@@ -24,9 +24,10 @@ class ExpenseModel(db.Model):
 
     event_model = relationship("EventModel", back_populates="expenses")
 
+    internal_expense_id = None
     def __init__(self):
+        print "init"
         self.is_removed = False
-        self.internal_expense_id = None
         self.time_stamp = datetime.utcnow()
 
     @classmethod
@@ -60,7 +61,9 @@ class ExpenseModel(db.Model):
 
         value = dict_model.get(k_internal_expense_id)
         if value is not None:
-            self.internal_expense_id = parse(value)
+            self.internal_expense_id = value
+            print "config internal id"
+            print self.internal_expense_id
 
     def to_dict(self):
         json_object = dict()
@@ -68,6 +71,9 @@ class ExpenseModel(db.Model):
         json_object[k_title] = self.title
         json_object[k_expense_id] = self.expense_id
         json_object[k_is_removed] = self.is_removed
+
+        print "to dict internal id"
+        print  self.internal_expense_id
 
         if self.internal_expense_id is not None:
             json_object[k_internal_expense_id] = self.internal_expense_id
