@@ -6,6 +6,7 @@ from sqlalchemy.orm import relationship
 from SharedModels import db
 
 k_title = 'title'
+k_value = 'value'
 k_is_removed = 'isRemoved'
 k_time_stamp = 'timeStamp'
 k_expense_id = 'expenseID'
@@ -18,11 +19,15 @@ class ExpenseModel(db.Model):
 
     expense_id = db.Column(db.Integer, primary_key=True)
     title = db.Column(db.Text)
+    value = db.Column(db.Float)
     is_removed = db.Column(db.Boolean)
     time_stamp = db.Column(db.DateTime)
     creation_date = db.Column(db.DateTime)
-    event_id = db.Column(db.Integer, db.ForeignKey('event_model.event_id'))
 
+    # creator_id = db.Column(db.Integer, db.ForeignKey('PersonModel.person_id'))
+    # creator_model = relationship("PersonModel")
+
+    event_id = db.Column(db.Integer, db.ForeignKey('event_model.event_id'))
     event_model = relationship("EventModel", back_populates="expenses")
 
     def __init__(self):
@@ -50,6 +55,10 @@ class ExpenseModel(db.Model):
         if value is not None:
             self.title = value
 
+        value = dict_model.get(k_value)
+        if value is not None:
+            self.value = value
+
         value = dict_model.get(k_creation_date)
         if value is not None:
             self.creation_date = parse(value)
@@ -70,6 +79,7 @@ class ExpenseModel(db.Model):
         json_object = dict()
 
         json_object[k_title] = self.title
+        json_object[k_value] = self.value
         json_object[k_expense_id] = self.expense_id
         json_object[k_is_removed] = self.is_removed
 

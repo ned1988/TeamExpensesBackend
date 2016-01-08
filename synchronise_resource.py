@@ -48,7 +48,7 @@ class SynchroniseResponse(BaseResource):
         result = []
         for event_dict in json_data:
             if isinstance(event_dict, dict):
-                event_model = EventModel.find_event(event_dict[k_event_id])
+                event_model = EventModel.find_event(event_dict.get(k_event_id))
 
                 event_model.creator_id = user_id
                 event_model.configure_with_dict(event_dict)

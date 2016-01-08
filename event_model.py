@@ -81,15 +81,14 @@ class EventModel(db.Model):
                 expense = ExpenseModel.find_expense(expense_id)
                 expense.configure_with_dict(expense_dict)
 
-                # Need commit immediately to get 'expnse_id'
+                # Need commit immediately to get 'expense_id'
                 db.session.add(expense)
                 db.session.commit()
 
                 if k_internal_expense_id in expense_dict:
                     self.internal_expense_ids[expense.expense_id] = expense_dict[k_internal_expense_id]
-                    
-                result.append(expense)
 
+                result.append(expense)
             self.expenses = result
 
 
