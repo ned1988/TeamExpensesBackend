@@ -60,11 +60,11 @@ class SynchroniseResponse(BaseResource):
 
                 result.append(event_json)
 
-        print json_data
-
         time_stamp = datetime.utcnow()
         response = dict()
         response['timeStamp'] = time_stamp.isoformat()
         response['result'] = result
+
+        # print response
 
         return response

@@ -1,10 +1,11 @@
+from sqlalchemy import orm
 from datetime import datetime
 from dateutil.parser import parse
 from sqlalchemy.orm import relationship
 
 from SharedModels import db
 from expense_model import ExpenseModel
-from expense_model import k_expense_id
+from expense_model import k_expense_id, k_internal_expense_id
 
 k_title = 'title'
 k_event_id = 'eventID'
@@ -23,11 +24,14 @@ class EventModel(db.Model):
     time_stamp = db.Column(db.DateTime)
     is_removed = db.Column(db.Boolean)
 
-    internal_event_id = None
-
     def __init__(self):
         self.is_removed = False
         self.time_stamp = datetime.utcnow()
+
+    @orm.reconstructor
+    def init_on_load(self):
+        self.internal_event_id = None
+        self.internal_expense_ids = {}
 
     @classmethod
     def time_stamp_difference(cls, user_id, time_stamp):
@@ -77,6 +81,13 @@ class EventModel(db.Model):
                 expense = ExpenseModel.find_expense(expense_id)
                 expense.configure_with_dict(expense_dict)
 
+                # Need commit immediately to get 'expnse_id'
+                db.session.add(expense)
+                db.session.commit()
+
+                if k_internal_expense_id in expense_dict:
+                    self.internal_expense_ids[expense.expense_id] = expense_dict[k_internal_expense_id]
+                    
                 result.append(expense)
 
             self.expenses = result
@@ -102,7 +113,11 @@ class EventModel(db.Model):
         if self.internal_event_id is not None:
             json_object[k_internal_event_id] = self.internal_event_id
 
-        expense_items = [model.to_dict() for model in self.expenses]
+        expense_items = []
+        for model in self.expenses:
+            if model.expense_id in self.internal_expense_ids:
+                model.internal_expense_id = self.internal_expense_ids[model.expense_id]
+            expense_items.append(model.to_dict())
         json_object[k_expenses] = expense_items
 
         return json_object
