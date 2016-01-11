@@ -62,7 +62,7 @@ class SynchroniseResponse(BaseResource):
 
         time_stamp = datetime.utcnow()
         response = dict()
-        response['timeStamp'] = time_stamp.isoformat()
+        response[Constants.k_time_stamp] = time_stamp.isoformat()
         response['result'] = result
 
         # print response

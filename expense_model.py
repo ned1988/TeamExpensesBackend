@@ -23,10 +23,9 @@ class ExpenseModel(db.Model):
     is_removed = db.Column(db.Boolean)
     time_stamp = db.Column(db.DateTime)
     creation_date = db.Column(db.DateTime)
+    creator_id = db.Column(db.Integer)
 
-    # creator_id = db.Column(db.Integer, db.ForeignKey('PersonModel.person_id'))
-    # creator_model = relationship("PersonModel")
-
+    # One to many relationship
     event_id = db.Column(db.Integer, db.ForeignKey('event_model.event_id'))
     event_model = relationship("EventModel", back_populates="expenses")
 

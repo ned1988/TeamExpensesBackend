@@ -2,6 +2,9 @@ class Constants:
     def __init__(self):
         pass
 
+    k_time_stamp = 'time_stamp'
+    k_internal_id = 'internalID'
+
     @staticmethod
     def error_token_not_valid():
         return {'status': 'token_not_valid'}, 401
