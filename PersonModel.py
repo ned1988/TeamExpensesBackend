@@ -3,6 +3,8 @@ from SharedModels import db
 
 
 class PersonModel(db.Model):
+    __tablename__ = 'person_model'
+
     def __init__(self):
         self.time_stamp = datetime.utcnow()
 

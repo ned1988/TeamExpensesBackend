@@ -24,6 +24,12 @@ class EventModel(db.Model):
     time_stamp = db.Column(db.DateTime)
     is_removed = db.Column(db.Boolean)
 
+    # Many to many relationship
+    secondary_table = db.Table('event_personal', db.Model.metadata,
+                               db.Column('event_id', db.Integer, db.ForeignKey('event_model.event_id'), primary_key=True),
+                               db.Column('person_id', db.Integer, db.ForeignKey('person_model.person_id'), primary_key=True))
+    team_members = relationship('PersonModel', secondary=secondary_table, backref='events')
+
     def __init__(self):
         self.is_removed = False
         self.time_stamp = datetime.utcnow()
