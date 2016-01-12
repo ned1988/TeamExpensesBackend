@@ -1,10 +1,15 @@
-import datetime
+from sqlalchemy import orm
+from datetime import datetime
 
 from SharedModels import db
 from constants import Constants
 
 k_token = 'token'
-k_personID = 'personID'
+k_email = 'email'
+k_person_id = 'personID'
+k_last_name = 'lastName'
+k_first_name = 'firstName'
+k_facebook_id = 'facebookID'
 
 
 class PersonModel(db.Model):
@@ -40,12 +45,18 @@ class PersonModel(db.Model):
 
         return PersonModel()
 
+    def configure_with_dict(self, dict_model):
+        self.email = dict_model.get(k_email)
+        self.last_name = dict_model.get(k_last_name)
+        self.first_name = dict_model.get(k_first_name)
+        self.facebook_id = dict_model.get(k_facebook_id)
+
     def to_dict(self):
-        json_object = {k_personID: self.person_id,
-                       'firstName': self.first_name,
-                       'lastName': self.last_name,
-                       'email': self.email,
-                       'facebookID': self.facebook_id,
+        json_object = {k_person_id: self.person_id,
+                       k_first_name: self.first_name,
+                       k_last_name: self.last_name,
+                       k_email: self.email,
+                       k_facebook_id: self.facebook_id,
                        }
 
         if not self.time_stamp is None:

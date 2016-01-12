@@ -2,6 +2,7 @@ class Constants:
     def __init__(self):
         pass
 
+    k_is_removed = 'isRemoved'
     k_time_stamp = 'time_stamp'
     k_internal_id = 'internalID'
 
