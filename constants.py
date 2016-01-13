@@ -2,7 +2,9 @@ class Constants:
     def __init__(self):
         pass
 
+    k_user_id = 'userID'
     k_is_removed = 'isRemoved'
+    k_user_token = 'userToken'
     k_time_stamp = 'time_stamp'
     k_internal_id = 'internalID'
 

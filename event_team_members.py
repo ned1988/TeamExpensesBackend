@@ -52,6 +52,3 @@ class EventTeamMembers(db.Model):
                     existed_model = items[0]
                     existed_model.event_id = event_model.event_id
                     existed_model.person_id = person_model.person_id
-
-        # items = EventModel.query.filter(EventModel.creator_id == user_id,
-        #                                     EventModel.time_stamp > time_stamp).all()

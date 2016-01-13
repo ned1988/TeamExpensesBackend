@@ -5,22 +5,21 @@ from sqlalchemy.orm import relationship
 
 from SharedModels import db
 from constants import Constants
+from PersonModel import PersonModel
 from expense_model import ExpenseModel
-from expense_model import k_expense_id
 from event_team_members import EventTeamMembers
-from PersonModel import PersonModel, k_person_id
-
-k_title = 'title'
-k_end_date = 'endDate'
-k_event_id = 'eventID'
-k_expenses = 'expenses'
-k_creator_id = 'creatorID'
-k_team_members = 'teamMembers'
-k_creation_date = 'creationDate'
 
 
 class EventModel(db.Model):
     __tablename__ = 'event_model'
+
+    k_title = 'title'
+    k_end_date = 'endDate'
+    k_event_id = 'eventID'
+    k_expenses = 'expenses'
+    k_creator_id = 'creatorID'
+    k_team_members = 'teamMembers'
+    k_creation_date = 'creationDate'
 
     event_id = db.Column(db.Integer, primary_key=True)
     title = db.Column(db.Text)
@@ -72,7 +71,9 @@ class EventModel(db.Model):
         return EventTeamMembers.add_team_members(self, value)
 
     def configure_with_dict(self, dict_model):
-        value = dict_model.get(k_title)
+        print dict_model
+
+        value = dict_model.get(self.k_title)
         if value is not None:
             self.title = value
 
@@ -80,20 +81,21 @@ class EventModel(db.Model):
         if value is not None:
             self.internal_event_id = value
 
-        value = dict_model.get(k_creation_date)
+        value = dict_model.get(self.k_creation_date)
         if value is not None:
             self.creation_date = parse(value)
 
-        self.configure_team_members_with_dict(dict_model.get(k_team_members))
+        value = dict_model.get(self.k_team_members)
+        self.configure_team_members_with_dict(value)
 
-        value = dict_model.get(k_expenses)
+        value = dict_model.get(self.k_expenses)
         self.configure_expense_with_dict(value)
 
     def configure_expense_with_dict(self, dict_model):
         if dict_model is not None and isinstance(dict_model, list):
             result = list(self.expenses)
             for expense_dict in dict_model:
-                expense_id = expense_dict.get(k_expense_id)
+                expense_id = expense_dict.get(self.k_expense_id)
 
                 expense = ExpenseModel.find_expense(expense_id)
                 expense.configure_with_dict(expense_dict)
@@ -111,7 +113,7 @@ class EventModel(db.Model):
     def configure_team_members_with_dict(self, dict_model):
         if dict_model is not None and isinstance(dict_model, list):
             for member_dict in dict_model:
-                member_id = member_dict.get(k_person_id)
+                member_id = member_dict.get(self.k_person_id)
 
                 member = PersonModel.find_person(member_id)
                 member.configure_with_dict(member_dict)
@@ -123,22 +125,19 @@ class EventModel(db.Model):
                 if Constants.k_internal_id in member_dict:
                     self.internal_team_member_ids[member.person_id] = member_dict[Constants.k_internal_id]
 
-                if member_dict.get(Constants.k_is_removed, False):
-
-
-    def to_dict(self):
+    def event_to_dict(self):
         json_object = dict()
 
-        json_object[k_title] = self.title
-        json_object[k_event_id] = self.event_id
-        json_object[k_creator_id] = self.creator_id
+        json_object[self.k_title] = self.title
+        json_object[self.k_event_id] = self.event_id
+        json_object[self.k_creator_id] = self.creator_id
         json_object[Constants.k_is_removed] = self.is_removed
 
         if self.creation_date is not None:
-            json_object[k_creation_date] = self.creation_date.isoformat()
+            json_object[self.k_creation_date] = self.creation_date.isoformat()
 
         if self.end_date is not None:
-            json_object[k_end_date] = self.end_date.isoformat()
+            json_object[self.k_end_date] = self.end_date.isoformat()
 
         if self.time_stamp is not None:
             json_object[Constants.k_time_stamp] = self.time_stamp.isoformat()
@@ -146,19 +145,24 @@ class EventModel(db.Model):
         if self.internal_event_id is not None:
             json_object[Constants.k_internal_id] = self.internal_event_id
 
+        return json_object
+
+    def to_dict(self):
+        json_object = self.event_to_dict()
+
         result = []
         for model in self.expenses:
             if model.expense_id in self.internal_expense_ids:
                 model.internal_expense_id = self.internal_expense_ids[model.expense_id]
             result.append(model.to_dict())
-        json_object[k_expenses] = result
+        json_object[self.k_expenses] = result
 
         result = []
         for model in self.team_members:
             if model.person_id in self.internal_team_member_ids:
                 model.internal_person_id = self.internal_team_member_ids[model.person_id]
             result.append(model.to_dict())
-        json_object[k_team_members] = result
+        json_object[self.k_team_members] = result
 
         return json_object
 

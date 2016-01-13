@@ -3,8 +3,9 @@ from flask_restful import reqparse
 
 from SharedModels import db
 from SharedModels import api
+from constants import Constants
 from SharedModels import passlib
-from PersonModel import PersonModel, k_token
+from PersonModel import PersonModel
 from token_serializer import TokenSerializer
 
 
@@ -30,7 +31,7 @@ class UserLoginResource(Resource):
                 db.session.commit()
 
                 result = person_model.to_dict()
-                result[k_token] = person_model.token
+                result[Constants.k_user_token] = person_model.token
 
                 return result
             else:

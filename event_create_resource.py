@@ -15,7 +15,11 @@ class EventCreateResource(BaseResource):
 
     @api.doc(parser=parser)
     def post(self):
-        args = api.parser().parse_args()
+        parser = reqparse.RequestParser()
+        parser.add_argument('userID', type=int, help='User ID', location='form', required=True)
+        parser.add_argument('title', type=str, help='Event title', location='form', required=True)
+        parser.add_argument('userToken', type=str, help='User token', location='form', required=True)
+        args = parser.parse_args()
 
         # user_id = request.form['userID']
         # token = request.form['userToken']
