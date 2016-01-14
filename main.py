@@ -49,14 +49,10 @@ passlib.init_app(app, context=LazyCryptContext(
 # Resources
 
 api.add_resource(TimeStampResource, '/timeStamp')
-api.add_resource(SynchroniseResponse, '/synchronise')
+
 api.add_resource(EventSynchroniseResource, '/synchronise/event')
 api.add_resource(SynchroniseExpenseResource, '/synchronise/expense')
 api.add_resource(SynchronisePersonResource, '/synchronise/teamMember')
-
-api.add_resource(EventAllResource, '/event/all')
-api.add_resource(EventCreateResource, '/event/create')
-api.add_resource(EventAddTeamMembersResource, '/event/addTeamMembers')
 
 api.add_resource(UserGetInfoResource, '/user')
 api.add_resource(UserLoginResource, '/user/login')
@@ -65,14 +61,10 @@ api.add_resource(UserRegisterResource, '/user/register')
 # REST API documentation
 
 docu_api.add_resource(TimeStampResource, '/timeStamp')
-docu_api.add_resource(SynchroniseResponse, '/synchronise')
+
 docu_api.add_resource(EventSynchroniseResource, '/synchronise/event')
 docu_api.add_resource(SynchroniseExpenseResource, '/synchronise/expense')
 docu_api.add_resource(SynchronisePersonResource, '/synchronise/teamMember')
-
-docu_api.add_resource(EventAllResource, '/event/all')
-docu_api.add_resource(EventCreateResource, '/event/create')
-docu_api.add_resource(EventAddTeamMembersResource, '/event/addTeamMembers')
 
 docu_api.add_resource(UserGetInfoResource, '/user')
 docu_api.add_resource(UserLoginResource, '/user/login')

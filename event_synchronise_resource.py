@@ -44,7 +44,7 @@ class EventSynchroniseResource(BaseResource):
             # Return error description
             return model
 
-        event_id = args[EventModel.k_event_id]
+        event_id = args[Constants.k_event_id]
         event_model = EventModel.find_event(event_id)
         event_model.configure_with_dict(args)
 
