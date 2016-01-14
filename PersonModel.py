@@ -45,11 +45,24 @@ class PersonModel(db.Model):
 
         return PersonModel()
 
+    @classmethod
+    def find_person_by_email(cls, email):
+        if email is None:
+            return None
+
+        items = PersonModel.query.filter_by(email=email).all()
+
+        if len(items) > 0:
+            return items[0]
+
+        return None
+
     def configure_with_dict(self, dict_model):
         self.email = dict_model.get(self.k_email)
         self.last_name = dict_model.get(self.k_last_name)
         self.first_name = dict_model.get(self.k_first_name)
         self.facebook_id = dict_model.get(self.k_facebook_id)
+        self.internal_person_id = dict_model.get(Constants.k_internal_id)
 
     def to_dict(self):
         json_object = {self.k_person_id: self.person_id,
@@ -59,7 +72,10 @@ class PersonModel(db.Model):
                        self.k_facebook_id: self.facebook_id,
                        }
 
-        if not self.time_stamp is None:
+        if self.time_stamp is not None:
             json_object[Constants.k_time_stamp] = self.time_stamp.isoformat()
+
+        if self.internal_person_id is not None:
+            json_object[Constants.k_internal_id] = self.internal_person_id
 
         return json_object

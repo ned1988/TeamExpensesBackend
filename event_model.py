@@ -15,7 +15,6 @@ class EventModel(db.Model):
 
     k_title = 'title'
     k_end_date = 'endDate'
-    k_event_id = 'eventID'
     k_expenses = 'expenses'
     k_creator_id = 'creatorID'
     k_team_members = 'teamMembers'
@@ -71,8 +70,6 @@ class EventModel(db.Model):
         return EventTeamMembers.add_team_members(self, value)
 
     def configure_with_dict(self, dict_model):
-        print dict_model
-
         value = dict_model.get(self.k_title)
         if value is not None:
             self.title = value
@@ -85,11 +82,11 @@ class EventModel(db.Model):
         if value is not None:
             self.creation_date = parse(value)
 
-        value = dict_model.get(self.k_team_members)
-        self.configure_team_members_with_dict(value)
-
         value = dict_model.get(self.k_expenses)
         self.configure_expense_with_dict(value)
+
+        # Update time stamp each time we update model from user
+        self.time_stamp = datetime.utcnow()
 
     def configure_expense_with_dict(self, dict_model):
         if dict_model is not None and isinstance(dict_model, list):
@@ -129,7 +126,7 @@ class EventModel(db.Model):
         json_object = dict()
 
         json_object[self.k_title] = self.title
-        json_object[self.k_event_id] = self.event_id
+        json_object[Constants.k_event_id] = self.event_id
         json_object[self.k_creator_id] = self.creator_id
         json_object[Constants.k_is_removed] = self.is_removed
 
@@ -156,12 +153,20 @@ class EventModel(db.Model):
                 model.internal_expense_id = self.internal_expense_ids[model.expense_id]
             result.append(model.to_dict())
         json_object[self.k_expenses] = result
-
+        
         result = []
-        for model in self.team_members:
-            if model.person_id in self.internal_team_member_ids:
-                model.internal_person_id = self.internal_team_member_ids[model.person_id]
-            result.append(model.to_dict())
+        for team_member_row in EventTeamMembers.team_members(self.event_id):
+
+            person = PersonModel.find_person(team_member_row.person_id)
+
+            person_dict = person.to_dict()
+            person_dict[Constants.k_is_removed] = team_member_row.is_removed
+
+            if person.time_stamp is not None:
+                person_dict[Constants.k_time_stamp] = person.time_stamp.isoformat()
+
+            result.append(person_dict)
+
         json_object[self.k_team_members] = result
 
         return json_object

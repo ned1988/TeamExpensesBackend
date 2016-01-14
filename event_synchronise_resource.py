@@ -14,7 +14,7 @@ class EventSynchroniseResource(BaseResource):
     parser.add_argument(Constants.k_user_token, type=str, help='User token', location='form', required=True)
 
     parser.add_argument(Constants.k_internal_id, type=str, help='Internal event ID', location='headers')
-    parser.add_argument(EventModel.k_event_id, type=str, help='Event ID', location='headers')
+    parser.add_argument(Constants.k_event_id, type=str, help='Event ID', location='headers')
     parser.add_argument(EventModel.k_creator_id, type=str, help='Event creator ID', location='headers', required=True)
     parser.add_argument(EventModel.k_title, type=str, help='Event title', location='headers')
     parser.add_argument(EventModel.k_creation_date, type=str, help='Creation even date', location='headers')
@@ -28,7 +28,7 @@ class EventSynchroniseResource(BaseResource):
         parser.add_argument(Constants.k_user_token, type=str, help='User token', location='form', required=True)
 
         parser.add_argument(Constants.k_internal_id, type=str, help='Internal event ID', location='headers')
-        parser.add_argument(EventModel.k_event_id, type=str, help='Event ID', location='headers')
+        parser.add_argument(Constants.k_event_id, type=str, help='Event ID', location='headers')
         parser.add_argument(EventModel.k_creator_id, type=str, help='Event creator ID', location='headers',
                             required=True)
         parser.add_argument(EventModel.k_title, type=str, help='Event title', location='headers')
@@ -48,11 +48,7 @@ class EventSynchroniseResource(BaseResource):
         event_model = EventModel.find_event(event_id)
         event_model.configure_with_dict(args)
 
-
         db.session.add(event_model)
         db.session.commit()
-
-        print 'EventSynchroniseResource'
-        print event_model.event_to_dict()
 
         return event_model.event_to_dict()

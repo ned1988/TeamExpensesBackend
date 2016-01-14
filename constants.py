@@ -3,6 +3,7 @@ class Constants:
         pass
 
     k_user_id = 'userID'
+    k_event_id = 'eventID'
     k_is_removed = 'isRemoved'
     k_user_token = 'userToken'
     k_time_stamp = 'time_stamp'

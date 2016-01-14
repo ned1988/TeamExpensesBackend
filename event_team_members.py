@@ -1,4 +1,7 @@
+from datetime import datetime
+
 from SharedModels import db
+from constants import Constants
 from PersonModel import PersonModel
 
 
@@ -11,13 +14,34 @@ class EventTeamMembers(db.Model):
     time_stamp = db.Column(db.DateTime)
 
     @classmethod
-    def team_members(cls, event_model):
-        if event_model is None:
+    def team_members(cls, event_id):
+        if event_id is None or not isinstance(event_id, int):
             return []
 
-        items = EventTeamMembers.query.filter_by(event_id=event_model.event_id).all()
+        team_member_rows = EventTeamMembers.query.filter_by(event_id=event_id).all()
 
-        return items
+        return team_member_rows
+
+    @classmethod
+    def find_team_member_for_event(cls, event_id, person_id):
+        if event_id is None or not isinstance(event_id, int):
+            return None
+
+        if person_id is None or not isinstance(person_id, int):
+            return None
+
+        items = EventTeamMembers.query.filter(EventTeamMembers.event_id==event_id,
+                                              EventTeamMembers.person_id==person_id).all()
+        if len(items) > 0:
+            existed_model = items[0]
+
+            return existed_model
+        else:
+            event_teamMember = EventTeamMembers()
+            event_teamMember.is_removed = False
+            event_teamMember.time_stamp = datetime.utcnow()
+
+            return event_teamMember
 
     @classmethod
     def add_team_member(cls, event_model, person_model):
@@ -33,8 +57,6 @@ class EventTeamMembers(db.Model):
             existed_model = items[0]
             existed_model.event_id = event_model.event_id
             existed_model.person_id = person_model.person_id
-
-
 
     @classmethod
     def remove_team_member(cls, event_model, person_items):
@@ -52,3 +74,15 @@ class EventTeamMembers(db.Model):
                     existed_model = items[0]
                     existed_model.event_id = event_model.event_id
                     existed_model.person_id = person_model.person_id
+
+    def to_dict(self):
+        json_object = dict()
+
+        json_object[Constants.k_event_id] = self.event_id
+        json_object[PersonModel.k_person_id] = self.person_id
+        json_object[Constants.k_is_removed] = self.is_removed
+
+        if self.time_stamp is not None:
+            json_object[Constants.k_time_stamp] = self.time_stamp.isoformat()
+
+        return json_object
