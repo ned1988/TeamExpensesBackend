@@ -18,6 +18,7 @@ from UserRegisterResource import UserRegisterResource
 from user_get_info_resource import UserGetInfoResource
 from event_synchronise_resource import EventSynchroniseResource
 from synchronise_person_response import SynchronisePersonResource
+from synchronise_expense_resource import SynchroniseExpenseResource
 from event_add_team_members_resource import EventAddTeamMembersResource
 
 os.environ.setdefault("DATABASE_URL", "postgresql://localhost/postgres")
@@ -50,6 +51,7 @@ passlib.init_app(app, context=LazyCryptContext(
 api.add_resource(TimeStampResource, '/timeStamp')
 api.add_resource(SynchroniseResponse, '/synchronise')
 api.add_resource(EventSynchroniseResource, '/synchronise/event')
+api.add_resource(SynchroniseExpenseResource, '/synchronise/expense')
 api.add_resource(SynchronisePersonResource, '/synchronise/teamMember')
 
 api.add_resource(EventAllResource, '/event/all')
@@ -65,6 +67,7 @@ api.add_resource(UserRegisterResource, '/user/register')
 docu_api.add_resource(TimeStampResource, '/timeStamp')
 docu_api.add_resource(SynchroniseResponse, '/synchronise')
 docu_api.add_resource(EventSynchroniseResource, '/synchronise/event')
+docu_api.add_resource(SynchroniseExpenseResource, '/synchronise/expense')
 docu_api.add_resource(SynchronisePersonResource, '/synchronise/teamMember')
 
 docu_api.add_resource(EventAllResource, '/event/all')
