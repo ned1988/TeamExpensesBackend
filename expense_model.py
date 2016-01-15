@@ -87,6 +87,7 @@ class ExpenseModel(db.Model):
         json_object[ExpenseModel.k_value] = self.value
         json_object[Constants.k_is_removed] = self.is_removed
         json_object[ExpenseModel.k_expense_id] = self.expense_id
+        json_object[ExpenseModel.k_creator_id] = self.creator_id
 
         if self.internal_expense_id is not None:
             json_object[Constants.k_internal_id] = self.internal_expense_id

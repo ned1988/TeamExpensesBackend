@@ -24,7 +24,6 @@ class SynchronisePersonResource(BaseResource):
     parser.add_argument(PersonModel.k_email, type=str, help='Email', location='headers')
     parser.add_argument(PersonModel.k_facebook_id, type=str, help='Facebook ID', location='headers')
 
-
     @api.doc(parser=parser)
     def post(self):
         parser = reqparse.RequestParser()
