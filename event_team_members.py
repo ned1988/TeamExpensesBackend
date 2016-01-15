@@ -30,18 +30,18 @@ class EventTeamMembers(db.Model):
         if person_id is None or not isinstance(person_id, int):
             return None
 
-        items = EventTeamMembers.query.filter(EventTeamMembers.event_id==event_id,
-                                              EventTeamMembers.person_id==person_id).all()
+        items = EventTeamMembers.query.filter(EventTeamMembers.event_id == event_id,
+                                              EventTeamMembers.person_id == person_id).all()
         if len(items) > 0:
             existed_model = items[0]
 
             return existed_model
         else:
-            event_teamMember = EventTeamMembers()
-            event_teamMember.is_removed = False
-            event_teamMember.time_stamp = datetime.utcnow()
+            event_team_member = EventTeamMembers()
+            event_team_member.is_removed = False
+            event_team_member.time_stamp = datetime.utcnow()
 
-            return event_teamMember
+            return event_team_member
 
     @classmethod
     def add_team_member(cls, event_model, person_model):

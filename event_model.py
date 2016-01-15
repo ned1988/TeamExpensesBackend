@@ -78,6 +78,10 @@ class EventModel(db.Model):
         if value is not None:
             self.internal_event_id = value
 
+        value = dict_model.get(EventModel.k_creator_id)
+        if value is not None:
+            self.creator_id = value
+
         value = dict_model.get(self.k_creation_date)
         if value is not None:
             self.creation_date = parse(value)

@@ -73,13 +73,12 @@ class ExpenseModel(db.Model):
         if value is not None:
             self.is_removed = value
 
-        value = dict_model.get(Constants.k_time_stamp)
-        if value is not None:
-            self.time_stamp = parse(value)
-
         value = dict_model.get(Constants.k_internal_id)
         if value is not None:
             self.internal_expense_id = value
+
+        # Update time stamp each time we update model from user
+        self.time_stamp = datetime.utcnow()
 
     def to_dict(self):
         json_object = dict()

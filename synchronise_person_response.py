@@ -53,7 +53,7 @@ class SynchronisePersonResource(BaseResource):
         email = args.get(PersonModel.k_email)
 
         # Is person has email?
-        if email is not None:
+        if email is not None and len(email) > 0:
             # Yes: try to find person by email
             person = PersonModel.find_person_by_email(email)
             if person is not None:
