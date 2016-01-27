@@ -25,10 +25,7 @@ class PersonModel(db.Model):
     time_stamp = db.Column(db.DateTime)
 
     event_owner = db.relationship("EventModel")
-
-    def __init__(self):
-        self.time_stamp = datetime.utcnow()
-
+    
     @orm.reconstructor
     def init_on_load(self):
         self.internal_person_id = None
@@ -63,6 +60,8 @@ class PersonModel(db.Model):
         self.first_name = dict_model.get(self.k_first_name)
         self.facebook_id = dict_model.get(self.k_facebook_id)
         self.internal_person_id = dict_model.get(Constants.k_internal_id)
+
+        self.time_stamp = datetime.utcnow()
 
     def to_dict(self):
         json_object = {self.k_person_id: self.person_id,

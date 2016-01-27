@@ -26,19 +26,11 @@ class UserRegisterResource(Resource):
         args = parser.parse_args()
 
         person_model = PersonModel()
+        person_model.configure_with_dict(args)
 
-        person_model.email = args['email']
         items = PersonModel.query.filter_by(email=person_model.email).all()
         if len(items) > 0:
             return Constants.error_with_message_and_status('user_is_already_exist', 401)
-
-        parameter = 'password'
-        if not parameter in args:
-            return Constants.error_missed_parameter(parameter)
-
-        person_model.first_name = args['firstName']
-        person_model.last_name = args['lastName']
-        person_model.facebook_id = args['facebookID']
 
         # Encrypt user password
         password = request.form['password']
