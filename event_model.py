@@ -50,6 +50,12 @@ class EventModel(db.Model):
         return items
 
     @classmethod
+    def all_user_events(cls, user_id):
+        items = EventModel.query.filter_by(creator_id=user_id).all()
+
+        return items
+
+    @classmethod
     def find_event(cls, event_id):
         if event_id is None:
             return EventModel()
@@ -63,7 +69,7 @@ class EventModel(db.Model):
 
     @property
     def team_members(self):
-        return EventTeamMembers.team_members(self)
+        return EventTeamMembers.team_members(self.event_id)
 
     @team_members.setter
     def team_members(self, value):
@@ -101,7 +107,7 @@ class EventModel(db.Model):
                 expense = ExpenseModel.find_expense(expense_id)
                 expense.configure_with_dict(expense_dict)
 
-                # Need commit immediately to get 'expense_id'
+                # Need to commit immediately to get 'expense_id'
                 db.session.add(expense)
                 db.session.commit()
 

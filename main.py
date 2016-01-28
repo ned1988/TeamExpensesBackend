@@ -9,7 +9,6 @@ from flask_passlib.context import werkzeug_salted_sha512
 
 from SharedModels import db, passlib
 from SharedModels import api as docu_api
-from EventAllResource import EventAllResource
 from time_stamp_resource import TimeStampResource
 from user_login_resource import UserLoginResource
 from synchronise_resource import SynchroniseResponse
@@ -19,7 +18,7 @@ from user_get_info_resource import UserGetInfoResource
 from event_synchronise_resource import EventSynchroniseResource
 from synchronise_person_response import SynchronisePersonResource
 from synchronise_expense_resource import SynchroniseExpenseResource
-from event_add_team_members_resource import EventAddTeamMembersResource
+from time_stamp_team_members_resource import TimeStampTeamMembersResource
 
 os.environ.setdefault("DATABASE_URL", "postgresql://localhost/postgres")
 
@@ -49,6 +48,7 @@ passlib.init_app(app, context=LazyCryptContext(
 # Resources
 
 api.add_resource(TimeStampResource, '/timeStamp')
+api.add_resource(TimeStampTeamMembersResource, '/timeStamp/teamMembers')
 
 api.add_resource(EventSynchroniseResource, '/synchronise/event')
 api.add_resource(SynchroniseExpenseResource, '/synchronise/expense')
@@ -61,6 +61,7 @@ api.add_resource(UserRegisterResource, '/user/register')
 # REST API documentation
 
 docu_api.add_resource(TimeStampResource, '/timeStamp')
+docu_api.add_resource(TimeStampTeamMembersResource, '/timeStamp/teamMembers')
 
 docu_api.add_resource(EventSynchroniseResource, '/synchronise/event')
 docu_api.add_resource(SynchroniseExpenseResource, '/synchronise/expense')

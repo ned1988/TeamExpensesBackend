@@ -13,12 +13,12 @@ class SynchronisePersonResource(BaseResource):
     parser = api.parser()
     parser.add_argument(Constants.k_user_id, type=int, help='User ID', location='form', required=True)
     parser.add_argument(Constants.k_user_token, type=str, help='User token', location='form', required=True)
+    parser.add_argument(Constants.k_event_id, type=int, help='Event ID', location='headers', required=True)
 
     parser.add_argument(PersonModel.k_person_id, type=str, help='Person ID', location='headers')
     parser.add_argument(Constants.k_internal_id, type=str, help='Internal event ID', location='headers')
-    parser.add_argument(Constants.k_is_removed, type=str, help='Is event removed', location='headers')
+    parser.add_argument(Constants.k_is_removed, type=str, help='Is person removed from event', location='headers')
 
-    parser.add_argument(Constants.k_event_id, type=int, help='Event ID', location='headers', required=True)
     parser.add_argument(PersonModel.k_first_name, type=str, help='First name', location='headers')
     parser.add_argument(PersonModel.k_last_name, type=str, help='Last name', location='headers')
     parser.add_argument(PersonModel.k_email, type=str, help='Email', location='headers')
@@ -29,12 +29,12 @@ class SynchronisePersonResource(BaseResource):
         parser = reqparse.RequestParser()
         parser.add_argument(Constants.k_user_id, type=int, help='User ID', location='form', required=True)
         parser.add_argument(Constants.k_user_token, type=str, help='User token', location='form', required=True)
+        parser.add_argument(Constants.k_event_id, type=int, help='Event ID', location='headers', required=True)
 
         parser.add_argument(PersonModel.k_person_id, type=str, help='Person ID', location='headers')
         parser.add_argument(Constants.k_internal_id, type=str, help='Internal event ID', location='headers')
-        parser.add_argument(Constants.k_is_removed, type=str, help='Is event removed', location='headers')
+        parser.add_argument(Constants.k_is_removed, type=str, help='Is person removed from event', location='headers')
 
-        parser.add_argument(Constants.k_event_id, type=int, help='Event ID', location='headers', required=True)
         parser.add_argument(PersonModel.k_first_name, type=str, help='First name', location='headers')
         parser.add_argument(PersonModel.k_last_name, type=str, help='Last name', location='headers')
         parser.add_argument(PersonModel.k_email, type=str, help='Email', location='headers')
@@ -80,6 +80,7 @@ class SynchronisePersonResource(BaseResource):
         if is_removed is not None:
             team_member_event_row.is_removed = bool(is_removed)
 
+        # Update time stamp in 'event_team_members' table
         team_member_event_row.time_stamp = datetime.utcnow()
 
         db.session.add(team_member_event_row)

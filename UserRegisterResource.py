@@ -33,7 +33,7 @@ class UserRegisterResource(Resource):
             return Constants.error_with_message_and_status('user_is_already_exist', 401)
 
         # Encrypt user password
-        password = request.form['password']
+        password = args['password']
         encr_password = passlib.encrypt(password, salt_length=100)
         person_model.password = encr_password
 

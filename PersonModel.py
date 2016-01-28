@@ -25,7 +25,7 @@ class PersonModel(db.Model):
     time_stamp = db.Column(db.DateTime)
 
     event_owner = db.relationship("EventModel")
-    
+
     @orm.reconstructor
     def init_on_load(self):
         self.internal_person_id = None
@@ -61,6 +61,7 @@ class PersonModel(db.Model):
         self.facebook_id = dict_model.get(self.k_facebook_id)
         self.internal_person_id = dict_model.get(Constants.k_internal_id)
 
+        # Update time stamp value in table
         self.time_stamp = datetime.utcnow()
 
     def to_dict(self):

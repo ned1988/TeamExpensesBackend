@@ -14,7 +14,40 @@ class EventTeamMembers(db.Model):
     time_stamp = db.Column(db.DateTime)
 
     @classmethod
+    def find_rows_for_user(cls, user_id):
+        """Find all events where current user is added as team member
+        :param user_id: User ID
+        :return:List of EventTeamMembers objects
+        """
+        if user_id is None or not isinstance(user_id, int):
+            return []
+
+        rows = EventTeamMembers.query.filter_by(user_id=user_id).all()
+
+        return rows
+
+    @classmethod
+    def time_stamp_for_event(cls, event_id, time_stamp):
+        """
+        Search all rows with current event_id value which are greater than time_stamp value
+        :param event_id:
+        :param time_stamp:
+        :return:
+        """
+        if time_stamp is None:
+            items = EventTeamMembers.query.filter_by(event_id=event_id).all()
+        else:
+            items = EventTeamMembers.query.filter(EventTeamMembers.event_id == event_id,
+                                                  EventTeamMembers.time_stamp > time_stamp).all()
+
+        return items
+
+    @classmethod
     def team_members(cls, event_id):
+        """Find all team members with current event ID
+        :param event_id: Event ID
+        :return:List of EventTeamMembers objects
+        """
         if event_id is None or not isinstance(event_id, int):
             return []
 
@@ -81,8 +114,5 @@ class EventTeamMembers(db.Model):
         json_object[Constants.k_event_id] = self.event_id
         json_object[PersonModel.k_person_id] = self.person_id
         json_object[Constants.k_is_removed] = self.is_removed
-
-        if self.time_stamp is not None:
-            json_object[Constants.k_time_stamp] = self.time_stamp.isoformat()
 
         return json_object

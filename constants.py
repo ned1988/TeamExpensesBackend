@@ -2,12 +2,15 @@ class Constants:
     def __init__(self):
         pass
 
+    k_result = 'result'
     k_user_id = 'userID'
     k_event_id = 'eventID'
     k_is_removed = 'isRemoved'
     k_user_token = 'userToken'
-    k_time_stamp = 'time_stamp'
+    k_time_stamp = 'timeStamp'
     k_internal_id = 'internalID'
+    k_team_members = 'teamMembers'
+    k_user_details = 'userDetails'
 
     @staticmethod
     def error_token_not_valid():
