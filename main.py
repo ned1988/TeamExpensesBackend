@@ -11,12 +11,12 @@ from SharedModels import db, passlib
 from SharedModels import api as docu_api
 from time_stamp_resource import TimeStampResource
 from user_login_resource import UserLoginResource
-from synchronise_resource import SynchroniseResponse
-from event_create_resource import EventCreateResource
 from UserRegisterResource import UserRegisterResource
 from user_get_info_resource import UserGetInfoResource
+from time_stamp_events_resource import TimeStampEventsResource
 from event_synchronise_resource import EventSynchroniseResource
 from synchronise_person_response import SynchronisePersonResource
+from time_stamp_expenses_resource import TimeStampExpensesResource
 from synchronise_expense_resource import SynchroniseExpenseResource
 from time_stamp_team_members_resource import TimeStampTeamMembersResource
 
@@ -48,6 +48,8 @@ passlib.init_app(app, context=LazyCryptContext(
 # Resources
 
 api.add_resource(TimeStampResource, '/timeStamp')
+api.add_resource(TimeStampEventsResource, '/timeStamp/events')
+api.add_resource(TimeStampExpensesResource, '/timeStamp/expenses')
 api.add_resource(TimeStampTeamMembersResource, '/timeStamp/teamMembers')
 
 api.add_resource(EventSynchroniseResource, '/synchronise/event')
@@ -61,6 +63,8 @@ api.add_resource(UserRegisterResource, '/user/register')
 # REST API documentation
 
 docu_api.add_resource(TimeStampResource, '/timeStamp')
+docu_api.add_resource(TimeStampEventsResource, '/timeStamp/events')
+docu_api.add_resource(TimeStampExpensesResource, '/timeStamp/expenses')
 docu_api.add_resource(TimeStampTeamMembersResource, '/timeStamp/teamMembers')
 
 docu_api.add_resource(EventSynchroniseResource, '/synchronise/event')

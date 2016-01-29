@@ -172,9 +172,6 @@ class EventModel(db.Model):
             person_dict = person.to_dict()
             person_dict[Constants.k_is_removed] = team_member_row.is_removed
 
-            if person.time_stamp is not None:
-                person_dict[Constants.k_time_stamp] = person.time_stamp.isoformat()
-
             result.append(person_dict)
 
         json_object[self.k_team_members] = result

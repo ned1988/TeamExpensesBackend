@@ -7,9 +7,10 @@ from constants import Constants
 from event_model import EventModel
 from PersonModel import PersonModel
 from base_resource import BaseResource
+from event_team_members import EventTeamMembers
 
 
-class TimeStampEventsResource(BaseResource):
+class TimeStampPersonsResource(BaseResource):
     parser = api.parser()
     parser.add_argument(Constants.k_user_id, type=str, help='User ID', location='headers', required=True)
     parser.add_argument(Constants.k_user_token, type=str, help='User token', location='headers', required=True)
@@ -31,13 +32,40 @@ class TimeStampEventsResource(BaseResource):
             # Wrong user credentials
             return model
 
+        # 1 First of all we need to find ell interested us events:
+        # - it can be created by current user
+        # - user can be the team member in event
+        event_ids = set()
+
+        # All events where user is a creator
+        items = EventModel.all_user_events(user_id)
+        for event_model in items:
+            event_ids.add(event_model.event_id)
+
+        # All events where user is a team member
+        items = EventTeamMembers.find_rows_for_user(user_id)
+        for event_team_member_model in items:
+            event_ids.add(event_team_member_model.event_id)
+
         time = args[Constants.k_time_stamp]
         time_stamp = None
-        if len(time) > 0:
+        if time is not None and len(time) > 0:
             time_stamp = parse(time)
 
-        items = EventModel.time_stamp_difference(user_id, time_stamp)
-        result = [result_model.event_to_dict() for result_model in items]
+        # 2 Now wee need to collect all user id's
+        user_ids = set()
+        for event_id in event_ids:
+            event_team_members = EventTeamMembers.team_members(event_id)
+
+            for model in event_team_members:
+                user_ids.add(model.person_id)
+
+        # 3 Configure list with user information
+        result = []
+        for user_id in user_ids:
+            peron = PersonModel.find_person(user_id)
+            result.append(peron.to_dict())
+
         time_stamp = datetime.utcnow()
 
         response = dict()

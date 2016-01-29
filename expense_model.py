@@ -37,6 +37,15 @@ class ExpenseModel(db.Model):
         self.internal_expense_id = None
 
     @classmethod
+    def time_stamp_difference(cls, event_id, time_stamp):
+        if time_stamp is None:
+            rows = ExpenseModel.query.filter_by(event_id=event_id).all()
+        else:
+            rows = ExpenseModel.query.filter(ExpenseModel.event_id == event_id,
+                                              ExpenseModel.time_stamp > time_stamp).all()
+        return rows
+
+    @classmethod
     def find_expense(cls, expense_id):
         if expense_id is None:
             return ExpenseModel()
@@ -85,17 +94,12 @@ class ExpenseModel(db.Model):
 
         json_object[ExpenseModel.k_title] = self.title
         json_object[ExpenseModel.k_value] = self.value
+        json_object[Constants.k_event_id] = self.event_id
         json_object[Constants.k_is_removed] = self.is_removed
         json_object[ExpenseModel.k_expense_id] = self.expense_id
         json_object[ExpenseModel.k_creator_id] = self.creator_id
 
-        if self.internal_expense_id is not None:
-            json_object[Constants.k_internal_id] = self.internal_expense_id
-
         if self.creation_date is not None:
             json_object[ExpenseModel.k_creation_date] = self.creation_date.isoformat()
-
-        if self.time_stamp is not None:
-            json_object[Constants.k_time_stamp] = self.time_stamp.isoformat()
 
         return json_object

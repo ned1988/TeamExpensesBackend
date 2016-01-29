@@ -34,7 +34,7 @@ class TimeStampTeamMembersResource(BaseResource):
 
         # 1 First of all we need to find ell interested us events:
         # - it can be created by current user
-        # - user can be the team member of event
+        # - user can be the team member in event
         event_ids = set()
 
         # All events where user is a creator
@@ -62,16 +62,10 @@ class TimeStampTeamMembersResource(BaseResource):
                 result.append(model.to_dict())
                 user_ids.add(model.person_id)
 
-        users = []
-        for user_id in user_ids:
-            user = PersonModel.find_person(user_id)
-            users.append(user)
-
         time_stamp = datetime.utcnow()
 
         response = dict()
-        response[Constants.k_team_members] = result
-        response[Constants.k_user_details] = [model.to_dict() for model in users]
+        response[Constants.k_result] = result
         response[Constants.k_time_stamp] = time_stamp.isoformat()
 
         return response
