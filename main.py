@@ -49,7 +49,6 @@ passlib.init_app(app, context=LazyCryptContext(
 
 # Resources
 
-api.add_resource(TimeStampResource, '/timeStamp')
 api.add_resource(TimeStampEventsResource, '/timeStamp/events')
 api.add_resource(TimeStampPersonsResource, '/timeStamp/persons')
 api.add_resource(TimeStampExpensesResource, '/timeStamp/expenses')
@@ -66,7 +65,6 @@ api.add_resource(UserRegisterResource, '/user/register')
 
 # REST API documentation
 
-docu_api.add_resource(TimeStampResource, '/timeStamp')
 docu_api.add_resource(TimeStampEventsResource, '/timeStamp/events')
 docu_api.add_resource(TimeStampPersonsResource, '/timeStamp/persons')
 docu_api.add_resource(TimeStampExpensesResource, '/timeStamp/expenses')
@@ -77,7 +75,6 @@ docu_api.add_resource(SynchronisePersonResource, '/synchronise/person')
 docu_api.add_resource(SynchroniseExpenseResource, '/synchronise/expense')
 docu_api.add_resource(SynchroniseTeamMemberResource, '/synchronise/teamMember')
 
-docu_api.add_resource(UserGetInfoResource, '/user')
 docu_api.add_resource(UserLoginResource, '/user/login')
 docu_api.add_resource(UserRegisterResource, '/user/register')
 

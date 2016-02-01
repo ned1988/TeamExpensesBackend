@@ -81,10 +81,4 @@ class PersonModel(db.Model):
                        self.k_facebook_id: self.facebook_id,
                        }
 
-        if self.time_stamp is not None:
-            json_object[Constants.k_time_stamp] = self.time_stamp.isoformat()
-
-        if self.internal_person_id is not None:
-            json_object[Constants.k_internal_id] = self.internal_person_id
-
         return json_object

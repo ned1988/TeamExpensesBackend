@@ -30,11 +30,15 @@ class UserLoginResource(Resource):
                 person_model.token = TokenSerializer.generate_auth_token(person_model.person_id)
                 db.session.commit()
 
-                result = person_model.to_dict()
-                result[Constants.k_user_token] = person_model.token
+                person = person_model.to_dict()
+                person[Constants.k_user_token] = person_model.token
+
+                result = dict()
+                result[Constants.k_status] = Constants.k_user_credentials_correct
+                result[Constants.k_user] = person
 
                 return result
             else:
-                return {'status': 'user_password_is_wrong'}, 401
+                return {Constants.k_status: 'user_password_is_wrong'}, 401
         else:
-            return {'status': 'user_is_not_exist'}, 401
+            return {Constants.k_status: 'user_is_not_exist'}, 401
