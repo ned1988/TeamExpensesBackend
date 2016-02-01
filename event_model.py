@@ -33,12 +33,6 @@ class EventModel(db.Model):
         self.is_removed = False
         self.time_stamp = datetime.utcnow()
 
-    @orm.reconstructor
-    def init_on_load(self):
-        self.internal_event_id = None
-        self.internal_expense_ids = {}
-        self.internal_team_member_ids = {}
-
     @classmethod
     def time_stamp_difference(cls, user_id, time_stamp):
         if time_stamp is None:
@@ -79,10 +73,6 @@ class EventModel(db.Model):
         value = dict_model.get(self.k_title)
         if value is not None:
             self.title = value
-
-        value = dict_model.get(Constants.k_internal_id)
-        if value is not None:
-            self.internal_event_id = value
 
         value = dict_model.get(EventModel.k_creator_id)
         if value is not None:
@@ -145,9 +135,6 @@ class EventModel(db.Model):
 
         if self.end_date is not None:
             json_object[self.k_end_date] = self.end_date.isoformat()
-
-        if self.internal_event_id is not None:
-            json_object[Constants.k_internal_id] = self.internal_event_id
 
         return json_object
 
