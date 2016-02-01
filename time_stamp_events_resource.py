@@ -33,7 +33,7 @@ class TimeStampEventsResource(BaseResource):
 
         time = args[Constants.k_time_stamp]
         time_stamp = None
-        if len(time) > 0:
+        if time is not None and len(time) > 0:
             time_stamp = parse(time)
 
         items = EventModel.time_stamp_difference(user_id, time_stamp)

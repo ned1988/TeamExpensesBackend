@@ -52,7 +52,7 @@ class TimeStampPersonsResource(BaseResource):
         if time is not None and len(time) > 0:
             time_stamp = parse(time)
 
-        # 2 Now wee need to collect all user id's
+        # 2 Collect all user id's
         user_ids = set()
         for event_id in event_ids:
             event_team_members = EventTeamMembers.team_members(event_id)
@@ -60,11 +60,18 @@ class TimeStampPersonsResource(BaseResource):
             for model in event_team_members:
                 user_ids.add(model.person_id)
 
-        # 3 Configure list with user information
+        # 3 Collect all expenses creator id's
+        for event_id in event_ids:
+            event = EventModel.find_event(event_id)
+            expenses = event.expenses
+            [user_ids.add(expense.creator_id) for expense in expenses]
+
+        # 4 Configure list with user information
         result = []
         for user_id in user_ids:
-            peron = PersonModel.find_person(user_id)
-            result.append(peron.to_dict())
+            person = PersonModel.time_stamp_difference(user_id, time_stamp)
+            if person is not None:
+                result.append(person.to_dict())
 
         time_stamp = datetime.utcnow()
 

@@ -13,7 +13,6 @@ class SynchronisePersonResource(BaseResource):
     parser = api.parser()
     parser.add_argument(Constants.k_user_id, type=int, help='User ID', location='form', required=True)
     parser.add_argument(Constants.k_user_token, type=str, help='User token', location='form', required=True)
-    parser.add_argument(Constants.k_event_id, type=int, help='Event ID', location='headers', required=True)
 
     parser.add_argument(PersonModel.k_person_id, type=str, help='Person ID', location='headers')
     parser.add_argument(Constants.k_internal_id, type=str, help='Internal event ID', location='headers')
@@ -29,7 +28,6 @@ class SynchronisePersonResource(BaseResource):
         parser = reqparse.RequestParser()
         parser.add_argument(Constants.k_user_id, type=int, help='User ID', location='form', required=True)
         parser.add_argument(Constants.k_user_token, type=str, help='User token', location='form', required=True)
-        parser.add_argument(Constants.k_event_id, type=int, help='Event ID', location='headers', required=True)
 
         parser.add_argument(PersonModel.k_person_id, type=str, help='Person ID', location='headers')
         parser.add_argument(Constants.k_internal_id, type=str, help='Internal event ID', location='headers')
@@ -69,21 +67,6 @@ class SynchronisePersonResource(BaseResource):
         person.configure_with_dict(args)
 
         db.session.add(person)
-        db.session.commit()
-
-        event_id = args.get(Constants.k_event_id)
-        team_member_event_row = EventTeamMembers.find_team_member_for_event(event_id, person.person_id)
-        team_member_event_row.event_id = event_id
-        team_member_event_row.person_id = person.person_id
-
-        is_removed = args.get(Constants.k_is_removed)
-        if is_removed is not None:
-            team_member_event_row.is_removed = bool(is_removed)
-
-        # Update time stamp in 'event_team_members' table
-        team_member_event_row.time_stamp = datetime.utcnow()
-
-        db.session.add(team_member_event_row)
         db.session.commit()
 
         return person.to_dict()

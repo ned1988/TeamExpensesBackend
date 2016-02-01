@@ -31,6 +31,15 @@ class PersonModel(db.Model):
         self.internal_person_id = None
 
     @classmethod
+    def time_stamp_difference(cls, user_id, time_stamp):
+        if time_stamp is None:
+            person = PersonModel.query.filter_by(person_id=user_id).first()
+        else:
+            person = PersonModel.query.filter(PersonModel.person_id == user_id,
+                                             PersonModel.time_stamp > time_stamp).first()
+        return person
+
+    @classmethod
     def find_person(cls, person_id):
         if person_id is None:
             return PersonModel()

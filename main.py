@@ -15,10 +15,12 @@ from UserRegisterResource import UserRegisterResource
 from user_get_info_resource import UserGetInfoResource
 from time_stamp_events_resource import TimeStampEventsResource
 from event_synchronise_resource import EventSynchroniseResource
+from time_stamp_persons_resource import TimeStampPersonsResource
 from synchronise_person_response import SynchronisePersonResource
 from time_stamp_expenses_resource import TimeStampExpensesResource
 from synchronise_expense_resource import SynchroniseExpenseResource
 from time_stamp_team_members_resource import TimeStampTeamMembersResource
+from synchronise_team_member_response import SynchroniseTeamMemberResource
 
 os.environ.setdefault("DATABASE_URL", "postgresql://localhost/postgres")
 
@@ -49,12 +51,14 @@ passlib.init_app(app, context=LazyCryptContext(
 
 api.add_resource(TimeStampResource, '/timeStamp')
 api.add_resource(TimeStampEventsResource, '/timeStamp/events')
+api.add_resource(TimeStampPersonsResource, '/timeStamp/persons')
 api.add_resource(TimeStampExpensesResource, '/timeStamp/expenses')
 api.add_resource(TimeStampTeamMembersResource, '/timeStamp/teamMembers')
 
 api.add_resource(EventSynchroniseResource, '/synchronise/event')
+api.add_resource(SynchronisePersonResource, '/synchronise/person')
 api.add_resource(SynchroniseExpenseResource, '/synchronise/expense')
-api.add_resource(SynchronisePersonResource, '/synchronise/teamMember')
+api.add_resource(SynchroniseTeamMemberResource, '/synchronise/teamMember')
 
 api.add_resource(UserGetInfoResource, '/user')
 api.add_resource(UserLoginResource, '/user/login')
@@ -64,12 +68,14 @@ api.add_resource(UserRegisterResource, '/user/register')
 
 docu_api.add_resource(TimeStampResource, '/timeStamp')
 docu_api.add_resource(TimeStampEventsResource, '/timeStamp/events')
+docu_api.add_resource(TimeStampPersonsResource, '/timeStamp/persons')
 docu_api.add_resource(TimeStampExpensesResource, '/timeStamp/expenses')
 docu_api.add_resource(TimeStampTeamMembersResource, '/timeStamp/teamMembers')
 
 docu_api.add_resource(EventSynchroniseResource, '/synchronise/event')
+docu_api.add_resource(SynchronisePersonResource, '/synchronise/person')
 docu_api.add_resource(SynchroniseExpenseResource, '/synchronise/expense')
-docu_api.add_resource(SynchronisePersonResource, '/synchronise/teamMember')
+docu_api.add_resource(SynchroniseTeamMemberResource, '/synchronise/teamMember')
 
 docu_api.add_resource(UserGetInfoResource, '/user')
 docu_api.add_resource(UserLoginResource, '/user/login')

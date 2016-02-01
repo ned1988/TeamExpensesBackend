@@ -146,9 +146,6 @@ class EventModel(db.Model):
         if self.end_date is not None:
             json_object[self.k_end_date] = self.end_date.isoformat()
 
-        if self.time_stamp is not None:
-            json_object[Constants.k_time_stamp] = self.time_stamp.isoformat()
-
         if self.internal_event_id is not None:
             json_object[Constants.k_internal_id] = self.internal_event_id
 

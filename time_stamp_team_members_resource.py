@@ -54,13 +54,11 @@ class TimeStampTeamMembersResource(BaseResource):
 
         # 2 Now wee need to collect information about all team members
         result = []
-        user_ids = set()
         for event_id in event_ids:
             event_team_members = EventTeamMembers.time_stamp_for_event(event_id, time_stamp)
 
             for model in event_team_members:
                 result.append(model.to_dict())
-                user_ids.add(model.person_id)
 
         time_stamp = datetime.utcnow()
 
