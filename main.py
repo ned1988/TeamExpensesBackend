@@ -9,10 +9,8 @@ from flask_passlib.context import werkzeug_salted_sha512
 
 from SharedModels import db, passlib
 from SharedModels import api as docu_api
-from time_stamp_resource import TimeStampResource
 from user_login_resource import UserLoginResource
 from UserRegisterResource import UserRegisterResource
-from user_get_info_resource import UserGetInfoResource
 from time_stamp_events_resource import TimeStampEventsResource
 from event_synchronise_resource import EventSynchroniseResource
 from time_stamp_persons_resource import TimeStampPersonsResource
@@ -59,7 +57,6 @@ api.add_resource(SynchronisePersonResource, '/synchronise/person')
 api.add_resource(SynchroniseExpenseResource, '/synchronise/expense')
 api.add_resource(SynchroniseTeamMemberResource, '/synchronise/teamMember')
 
-api.add_resource(UserGetInfoResource, '/user')
 api.add_resource(UserLoginResource, '/user/login')
 api.add_resource(UserRegisterResource, '/user/register')
 

@@ -1,4 +1,3 @@
-from datetime import datetime
 from flask_restful import reqparse
 
 from SharedModels import db
@@ -23,9 +22,9 @@ class SynchroniseTeamMemberResource(BaseResource):
     def post(self):
         parser = reqparse.RequestParser()
         parser.add_argument(Constants.k_user_id, type=int, help='User ID', location='form', required=True)
-
         parser.add_argument(Constants.k_user_token, type=str, help='User token', location='form', required=True)
-        parser.add_argument(Constants.k_event_id, type=int, help='Team Member ID', location='headers', required=True)
+
+        parser.add_argument(Constants.k_event_id, type=int, help='Event ID', location='headers', required=True)
         parser.add_argument(PersonModel.k_person_id, type=int, help='Person ID', location='headers', required=True)
         parser.add_argument(EventTeamMembers.k_team_member_id, type=int, help='Team member ID', location='headers')
         parser.add_argument(Constants.k_is_removed, type=str, help='Is person removed from event', location='headers')
@@ -45,4 +44,7 @@ class SynchroniseTeamMemberResource(BaseResource):
         db.session.add(team_member)
         db.session.commit()
 
-        return team_member.to_dict()
+        result = dict()
+        result[Constants.k_result] = team_member.to_dict()
+
+        return result

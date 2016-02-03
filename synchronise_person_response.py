@@ -1,4 +1,3 @@
-from datetime import datetime
 from flask_restful import reqparse
 
 from SharedModels import db
@@ -6,7 +5,6 @@ from SharedModels import api
 from constants import Constants
 from PersonModel import PersonModel
 from base_resource import BaseResource
-from event_team_members import EventTeamMembers
 
 
 class SynchronisePersonResource(BaseResource):
@@ -69,4 +67,7 @@ class SynchronisePersonResource(BaseResource):
         db.session.add(person)
         db.session.commit()
 
-        return person.to_dict()
+        result = dict()
+        result[Constants.k_result] = person.to_dict()
+
+        return result

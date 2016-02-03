@@ -51,4 +51,7 @@ class EventSynchroniseResource(BaseResource):
         db.session.add(event_model)
         db.session.commit()
 
-        return event_model.event_to_dict()
+        result = dict()
+        result[Constants.k_result] = event_model.to_dict()
+
+        return result

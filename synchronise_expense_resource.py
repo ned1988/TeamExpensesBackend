@@ -57,4 +57,7 @@ class SynchroniseExpenseResource(BaseResource):
         db.session.add(expense_model)
         db.session.commit()
 
-        return expense_model.to_dict()
+        result = dict()
+        result[Constants.k_result] = expense_model.to_dict()
+
+        return result
