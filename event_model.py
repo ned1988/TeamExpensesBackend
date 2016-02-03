@@ -1,4 +1,3 @@
-from sqlalchemy import orm
 from datetime import datetime
 from dateutil.parser import parse
 from sqlalchemy.orm import relationship
@@ -82,45 +81,8 @@ class EventModel(db.Model):
         if value is not None:
             self.creation_date = parse(value)
 
-        value = dict_model.get(self.k_expenses)
-        self.configure_expense_with_dict(value)
-
         # Update time stamp each time we update model from user
         self.time_stamp = datetime.utcnow()
-
-    def configure_expense_with_dict(self, dict_model):
-        if dict_model is not None and isinstance(dict_model, list):
-            result = list(self.expenses)
-            for expense_dict in dict_model:
-                expense_id = expense_dict.get(self.k_expense_id)
-
-                expense = ExpenseModel.find_expense(expense_id)
-                expense.configure_with_dict(expense_dict)
-
-                # Need to commit immediately to get 'expense_id'
-                db.session.add(expense)
-                db.session.commit()
-
-                if Constants.k_internal_id in expense_dict:
-                    self.internal_expense_ids[expense.expense_id] = expense_dict[Constants.k_internal_id]
-
-                result.append(expense)
-            self.expenses = result
-
-    def configure_team_members_with_dict(self, dict_model):
-        if dict_model is not None and isinstance(dict_model, list):
-            for member_dict in dict_model:
-                member_id = member_dict.get(self.k_person_id)
-
-                member = PersonModel.find_person(member_id)
-                member.configure_with_dict(member_dict)
-
-                # Need commit immediately to get 'person_id'
-                db.session.add(member)
-                db.session.commit()
-
-                if Constants.k_internal_id in member_dict:
-                    self.internal_team_member_ids[member.person_id] = member_dict[Constants.k_internal_id]
 
     def event_to_dict(self):
         json_object = dict()
