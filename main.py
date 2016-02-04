@@ -19,6 +19,7 @@ from time_stamp_expenses_resource import TimeStampExpensesResource
 from synchronise_expense_resource import SynchroniseExpenseResource
 from time_stamp_team_members_resource import TimeStampTeamMembersResource
 from synchronise_team_member_response import SynchroniseTeamMemberResource
+from synchronise_expense_person_resource import SynchroniseExpensePersonResource
 
 os.environ.setdefault("DATABASE_URL", "postgresql://localhost/postgres")
 
@@ -56,6 +57,7 @@ api.add_resource(EventSynchroniseResource, '/synchronise/event')
 api.add_resource(SynchronisePersonResource, '/synchronise/person')
 api.add_resource(SynchroniseExpenseResource, '/synchronise/expense')
 api.add_resource(SynchroniseTeamMemberResource, '/synchronise/teamMember')
+api.add_resource(SynchroniseExpensePersonResource, '/synchronise/expensePerson')
 
 api.add_resource(UserLoginResource, '/user/login')
 api.add_resource(UserRegisterResource, '/user/register')
@@ -71,6 +73,7 @@ docu_api.add_resource(EventSynchroniseResource, '/synchronise/event')
 docu_api.add_resource(SynchronisePersonResource, '/synchronise/person')
 docu_api.add_resource(SynchroniseExpenseResource, '/synchronise/expense')
 docu_api.add_resource(SynchroniseTeamMemberResource, '/synchronise/teamMember')
+docu_api.add_resource(SynchroniseExpensePersonResource, '/synchronise/expensePerson')
 
 docu_api.add_resource(UserLoginResource, '/user/login')
 docu_api.add_resource(UserRegisterResource, '/user/register')

@@ -64,10 +64,6 @@ class EventModel(db.Model):
     def team_members(self):
         return EventTeamMembers.team_members(self.event_id)
 
-    @team_members.setter
-    def team_members(self, value):
-        return EventTeamMembers.add_team_members(self, value)
-
     def configure_with_dict(self, dict_model):
         value = dict_model.get(self.k_title)
         if value is not None:
