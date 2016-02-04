@@ -12,7 +12,7 @@ from expense_person import ExpensePerson
 class SynchroniseExpensePersonResource(BaseResource):
     parser = api.parser()
     parser.add_argument(Constants.k_user_id, type=int, help='User ID', location='form', required=True)
-    parser.add_argument(Constants.k_user_token, type=str, help='User token', location='form', required=True)
+    # parser.add_argument(Constants.k_user_token, type=str, help='User token', location='form', required=True)
 
     parser.add_argument(ExpenseModel.k_expense_id, type=int, help='Expense ID', location='headers', required=True)
     parser.add_argument(PersonModel.k_person_id, type=int, help='Person ID', location='headers', required=True)
@@ -23,7 +23,7 @@ class SynchroniseExpensePersonResource(BaseResource):
     def post(self):
         parser = reqparse.RequestParser()
         parser.add_argument(Constants.k_user_id, type=int, help='User ID', location='form', required=True)
-        parser.add_argument(Constants.k_user_token, type=str, help='User token', location='form', required=True)
+        # parser.add_argument(Constants.k_user_token, type=str, help='User token', location='form', required=True)
 
         parser.add_argument(ExpenseModel.k_expense_id, type=int, help='Expense ID', location='headers', required=True)
         parser.add_argument(PersonModel.k_person_id, type=int, help='Person ID', location='headers', required=True)
@@ -33,12 +33,12 @@ class SynchroniseExpensePersonResource(BaseResource):
         args = parser.parse_args()
 
         user_id = args[Constants.k_user_id]
-        token = args[Constants.k_user_token]
-        current_user = BaseResource.check_user_credentials_with_credentials(user_id, token=token)
-
-        if not isinstance(current_user, PersonModel):
-            # Return error description
-            return current_user
+        # token = args[Constants.k_user_token]
+        # current_user = BaseResource.check_user_credentials_with_credentials(user_id, token=token)
+        #
+        # if not isinstance(current_user, PersonModel):
+        #     # Return error description
+        #     return current_user
 
         expense_person_id = args[ExpensePerson.k_expense_person_id]
         expense_person = ExpensePerson.find_expense_person(expense_person_id)

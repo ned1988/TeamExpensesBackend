@@ -11,8 +11,8 @@ class EventTeamMembers(db.Model):
     k_team_member_id = 'teamMemberID'
 
     team_member_id = db.Column(db.Integer, primary_key=True)
-    event_id = db.Column(db.Integer)
-    person_id = db.Column(db.Integer)
+    event_id = db.Column(db.Integer, db.ForeignKey('event_model.event_id'))
+    person_id = db.Column(db.Integer, db.ForeignKey('person_model.person_id'))
     is_removed = db.Column(db.Boolean)
     time_stamp = db.Column(db.DateTime)
 

@@ -12,8 +12,8 @@ class ExpensePerson(db.Model):
     k_expense_person_id = 'expensePersonID'
 
     expense_person_id = db.Column(db.Integer, primary_key=True)
-    expense_id = db.Column(db.Integer)
-    person_id = db.Column(db.Integer)
+    expense_id = db.Column(db.Integer, db.ForeignKey('expense_model.expense_id'))
+    person_id = db.Column(db.Integer, db.ForeignKey('person_model.person_id'))
     is_removed = db.Column(db.Boolean)
     time_stamp = db.Column(db.DateTime)
 
