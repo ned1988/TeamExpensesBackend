@@ -20,13 +20,12 @@ class EventModel(db.Model):
     k_creation_date = 'creationDate'
 
     event_id = db.Column(db.Integer, primary_key=True)
+    creator_id = db.Column(db.Integer, db.ForeignKey('person_model.person_id'))
     title = db.Column(db.Text)
     creation_date = db.Column(db.DateTime)
     end_date = db.Column(db.DateTime)
     time_stamp = db.Column(db.DateTime)
     is_removed = db.Column(db.Boolean)
-    # One person can create many events
-    creator_id = db.Column(db.Integer, db.ForeignKey('person_model.person_id'))
 
     def __init__(self):
         self.is_removed = False
@@ -98,25 +97,6 @@ class EventModel(db.Model):
 
     def to_dict(self):
         json_object = self.event_to_dict()
-
-        result = []
-        for model in self.expenses:
-            if model.expense_id in self.internal_expense_ids:
-                model.internal_expense_id = self.internal_expense_ids[model.expense_id]
-            result.append(model.to_dict())
-        json_object[self.k_expenses] = result
-        
-        result = []
-        for team_member_row in EventTeamMembers.team_members(self.event_id):
-
-            person = PersonModel.find_person(team_member_row.person_id)
-
-            person_dict = person.to_dict()
-            person_dict[Constants.k_is_removed] = team_member_row.is_removed
-
-            result.append(person_dict)
-
-        json_object[self.k_team_members] = result
 
         return json_object
 

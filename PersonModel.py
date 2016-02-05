@@ -1,4 +1,3 @@
-from sqlalchemy import orm
 from datetime import datetime
 
 from SharedModels import db
@@ -25,10 +24,6 @@ class PersonModel(db.Model):
     time_stamp = db.Column(db.DateTime)
 
     event_owner = db.relationship("EventModel")
-
-    @orm.reconstructor
-    def init_on_load(self):
-        self.internal_person_id = None
 
     @classmethod
     def time_stamp_difference(cls, user_id, time_stamp):
@@ -68,7 +63,6 @@ class PersonModel(db.Model):
         self.last_name = dict_model.get(self.k_last_name)
         self.first_name = dict_model.get(self.k_first_name)
         self.facebook_id = dict_model.get(self.k_facebook_id)
-        self.internal_person_id = dict_model.get(Constants.k_internal_id)
 
         # Update time stamp value in table
         self.time_stamp = datetime.utcnow()

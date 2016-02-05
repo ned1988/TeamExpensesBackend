@@ -1,5 +1,5 @@
+import datetime
 from SharedModels import db
-from datetime import datetime
 from dateutil.parser import parse
 from flask_restful import reqparse
 
@@ -37,7 +37,7 @@ class TimeStampTeamMembersResource(BaseResource):
         if time is not None and len(time) > 0:
             time_stamp = parse(time)
 
-        items = EventTeamMembers.query.join(EventModel).filter(db.or_(EventModel.creator_id == user_id,
+        items = EventTeamMembers.query.filter(db.or_(EventModel.creator_id == user_id,
                                                                       EventTeamMembers.person_id == user_id))
 
         if time_stamp is not None:

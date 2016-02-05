@@ -1,11 +1,13 @@
+from SharedModels import db
 from datetime import datetime
 from dateutil.parser import parse
 from flask_restful import reqparse
 
 from SharedModels import api
 from constants import Constants
-from PersonModel import PersonModel
+from event_model import EventModel
 from base_resource import BaseResource
+from expense_model import ExpenseModel
 from expense_person import ExpensePerson
 from event_team_members import EventTeamMembers
 
@@ -13,24 +15,24 @@ from event_team_members import EventTeamMembers
 class TimeStampExpensePeopleResource(BaseResource):
     parser = api.parser()
     parser.add_argument(Constants.k_user_id, type=str, help='User ID', location='headers', required=True)
-    parser.add_argument(Constants.k_user_token, type=str, help='User token', location='headers', required=True)
+    # parser.add_argument(Constants.k_user_token, type=str, help='User token', location='headers', required=True)
     parser.add_argument(Constants.k_time_stamp, type=str, help='Time Stamp', location='headers')
 
     @api.doc(parser=parser)
     def get(self):
         parser = reqparse.RequestParser()
         parser.add_argument(Constants.k_user_id, type=str, help='User ID', location='headers', required=True)
-        parser.add_argument(Constants.k_user_token, type=str, help='User token', location='headers', required=True)
+        # parser.add_argument(Constants.k_user_token, type=str, help='User token', location='headers', required=True)
         parser.add_argument(Constants.k_time_stamp, type=str, help='Time Stamp', location='headers')
         args = parser.parse_args()
 
         user_id = args[Constants.k_user_id]
-        token = args[Constants.k_user_token]
-        model = BaseResource.check_user_credentials_with_credentials(user_id, token)
-
-        if not isinstance(model, PersonModel):
-            # Wrong user credentials
-            return model
+        # token = args[Constants.k_user_token]
+        # model = BaseResource.check_user_credentials_with_credentials(user_id, token)
+        #
+        # if not isinstance(model, PersonModel):
+        #     # Wrong user credentials
+        #     return model
 
         # Parse time stamp value
         time = args[Constants.k_time_stamp]
@@ -39,43 +41,25 @@ class TimeStampExpensePeopleResource(BaseResource):
         if time is not None and len(time) > 0:
             time_stamp = parse(time)
 
-        # Wee need to find all expenses:
-        # - created by us
-        # - expense is part of event
-        all_events = EventTeamMembers.find_rows_for_user(user_id)
+        # query = db.session.query(ExpenseModel, EventModel, EventTeamMembers, ExpensePerson)
+        query = db.session.query(ExpensePerson)
 
-#         # 1 First of all we need to find ell interested us events:
-#         # - it can be created by current user
-#         # - user can be the team member in event
-#         event_ids = set()
-#
-#         # All events where user is a creator
-#         items = EventModel.all_user_events(user_id)
-#         for event_model in items:
-#             event_ids.add(event_model.event_id)
-#
-#         # All events where user is a team member
-#         items = EventTeamMembers.find_rows_for_user(user_id)
-#         for event_team_member_model in items:
-#             event_ids.add(event_team_member_model.event_id)
-#
-#         time = args[Constants.k_time_stamp]
-#         time_stamp = None
-#         if time is not None and len(time) > 0:
-#             time_stamp = parse(time)
-#
-#         # 2 Now wee need to collect information about all team members
-#         result = []
-#         for event_id in event_ids:
-#             event_team_members = EventTeamMembers.time_stamp_for_event(event_id, time_stamp)
-#
-#             for model in event_team_members:
-#                 result.append(model.to_dict())
+        db_and = db.and_(ExpenseModel.event_id == EventTeamMembers.event_id,
+                         EventTeamMembers.person_id == user_id,
+                         EventModel.event_id == ExpenseModel.event_id,
+                         ExpensePerson.expense_id == ExpenseModel.expense_id,
+                         ExpenseModel.creator_id == ExpensePerson.person_id)
 
-        expense_persons = ExpensePerson.find_rows_for_user_time_stamp(user_id, time_stamp)
+        if time_stamp is not None:
+            items = query.filter(db_and, ExpensePerson.time_stamp > time_stamp)
+        else:
+            items = query.filter(db_and)
+        print items
 
         time_stamp = datetime.utcnow()
-        result = [expense_person.to_dict() for expense_person in expense_persons]
+        result = []
+
+        [result.append(model.to_dict()) for model in items]
 
         response = dict()
         response[Constants.k_result] = result
