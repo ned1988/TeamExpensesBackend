@@ -1,5 +1,5 @@
-import datetime
 from SharedModels import db
+from datetime import datetime
 from dateutil.parser import parse
 from flask_restful import reqparse
 
