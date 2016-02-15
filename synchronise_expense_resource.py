@@ -1,3 +1,4 @@
+from flask_restplus import fields
 from flask_restful import reqparse
 
 from SharedModels import db
@@ -6,6 +7,10 @@ from constants import Constants
 from PersonModel import PersonModel
 from expense_model import ExpenseModel
 from base_resource import BaseResource
+
+model = api.model('SynchroniseExpenseResource', {
+    Constants.k_result: fields.Nested(ExpenseModel.swagger_return_model()),
+})
 
 
 class SynchroniseExpenseResource(BaseResource):
@@ -24,8 +29,8 @@ class SynchroniseExpenseResource(BaseResource):
     parser.add_argument(Constants.k_is_removed, type=str, help='Is expense removed', location='headers')
     parser.add_argument(ExpenseModel.k_creation_date, type=str, help='Expense creation date', location='headers')
 
-
     @api.doc(parser=parser)
+    @api.marshal_with(model)
     def post(self):
         parser = reqparse.RequestParser()
         parser.add_argument(Constants.k_user_id, type=int, help='User ID', location='form', required=True)

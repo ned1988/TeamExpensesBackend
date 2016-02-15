@@ -1,3 +1,4 @@
+from flask_restplus import fields
 from flask_restful import Resource
 from flask_restful import reqparse
 
@@ -8,6 +9,10 @@ from SharedModels import passlib
 from PersonModel import PersonModel
 from token_serializer import TokenSerializer
 
+model = api.model('UserLoginResource', {
+    Constants.k_user: fields.List(fields.Nested(PersonModel.swagger_return_model())),
+    Constants.k_status: fields.String()
+})
 
 class UserLoginResource(Resource):
     parser = api.parser()
@@ -15,6 +20,7 @@ class UserLoginResource(Resource):
     parser.add_argument('password', type=str, help='User password', location='form', required=True)
 
     @api.doc(parser=parser)
+    @api.marshal_with(model)
     def post(self):
         parser = reqparse.RequestParser()
         parser.add_argument('email', type=str, help='User email', location='form', required=True)

@@ -1,4 +1,5 @@
 from datetime import datetime
+from flask_restplus import fields
 from dateutil.parser import parse
 from flask_restful import reqparse
 
@@ -10,6 +11,11 @@ from base_resource import BaseResource
 from expense_model import ExpenseModel
 from event_team_members import EventTeamMembers
 
+model = api.model('TimeStampExpensesResource', {
+    Constants.k_result: fields.List(fields.Nested(ExpenseModel.swagger_return_model())),
+    Constants.k_time_stamp: fields.DateTime(dt_format='ISO8601')
+})
+
 
 class TimeStampExpensesResource(BaseResource):
     parser = api.parser()
@@ -18,6 +24,7 @@ class TimeStampExpensesResource(BaseResource):
     parser.add_argument(Constants.k_time_stamp, type=str, help='Time Stamp', location='headers')
 
     @api.doc(parser=parser)
+    @api.marshal_with(model)
     def get(self):
         parser = reqparse.RequestParser()
         parser.add_argument(Constants.k_user_id, type=str, help='User ID', location='headers', required=True)

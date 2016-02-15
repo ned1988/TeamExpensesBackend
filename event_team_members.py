@@ -1,6 +1,8 @@
 from datetime import datetime
+from flask_restplus import fields
 
 from SharedModels import db
+from SharedModels import api
 from constants import Constants
 from PersonModel import PersonModel
 
@@ -15,6 +17,17 @@ class EventTeamMembers(db.Model):
     person_id = db.Column(db.Integer, db.ForeignKey('person_model.person_id'))
     is_removed = db.Column(db.Boolean)
     time_stamp = db.Column(db.DateTime)
+
+    @classmethod
+    def swagger_return_model(cls):
+        swagger_model = api.model('EventTeamMembers', {
+            EventTeamMembers.k_team_member_id: fields.Integer(required=True),
+            Constants.k_event_id: fields.Integer(required=True),
+            PersonModel.k_person_id: fields.Integer(required=True),
+            Constants.k_is_removed: fields.Boolean(required=True)
+        })
+
+        return swagger_model
 
     @classmethod
     def find_rows_for_user(cls, user_id):

@@ -1,3 +1,4 @@
+from flask_restplus import fields
 from flask_restful import reqparse
 from flask_restful import Resource
 
@@ -6,6 +7,11 @@ from constants import Constants
 from PersonModel import PersonModel
 from SharedModels import db, passlib
 from token_serializer import TokenSerializer
+
+model = api.model('UserLoginResource', {
+    Constants.k_user: fields.List(fields.Nested(PersonModel.swagger_return_model())),
+    Constants.k_status: fields.String()
+})
 
 
 class UserRegisterResource(Resource):
@@ -17,6 +23,7 @@ class UserRegisterResource(Resource):
     parser.add_argument('facebookID', type=str, help='Facebook ID', location='form')
 
     @api.doc(parser=parser)
+    @api.marshal_with(model)
     def post(self):
         parser = reqparse.RequestParser()
         parser.add_argument('email', type=str, help='User email', location='form', required=True)

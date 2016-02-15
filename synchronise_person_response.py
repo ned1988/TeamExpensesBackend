@@ -1,3 +1,4 @@
+from flask_restplus import fields
 from flask_restful import reqparse
 
 from SharedModels import db
@@ -5,6 +6,10 @@ from SharedModels import api
 from constants import Constants
 from PersonModel import PersonModel
 from base_resource import BaseResource
+
+model = api.model('SynchronisePersonResource', {
+    Constants.k_result: fields.Nested(PersonModel.swagger_return_model()),
+})
 
 
 class SynchronisePersonResource(BaseResource):
@@ -22,6 +27,7 @@ class SynchronisePersonResource(BaseResource):
     parser.add_argument(PersonModel.k_facebook_id, type=str, help='Facebook ID', location='headers')
 
     @api.doc(parser=parser)
+    @api.marshal_with(model)
     def post(self):
         parser = reqparse.RequestParser()
         parser.add_argument(Constants.k_user_id, type=int, help='User ID', location='form', required=True)

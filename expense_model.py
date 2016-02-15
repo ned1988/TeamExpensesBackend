@@ -1,9 +1,11 @@
 from sqlalchemy import orm
 from datetime import datetime
+from flask_restplus import fields
 from dateutil.parser import parse
 from sqlalchemy.orm import relationship
 
 from SharedModels import db
+from SharedModels import api
 from constants import Constants
 
 class ExpenseModel(db.Model):
@@ -27,6 +29,20 @@ class ExpenseModel(db.Model):
     # One to many relationship
     event_id = db.Column(db.Integer, db.ForeignKey('event_model.event_id'))
     event_model = relationship("EventModel", back_populates="expenses")
+
+    @classmethod
+    def swagger_return_model(cls):
+        swagger_model = api.model('ExpenseModel', {
+            ExpenseModel.k_title: fields.Integer(required=True),
+            ExpenseModel.k_value: fields.Integer(required=True),
+            Constants.k_event_id: fields.Integer(required=True),
+            Constants.k_is_removed: fields.Boolean(required=True),
+            ExpenseModel.k_expense_id: fields.Integer(required=True),
+            ExpenseModel.k_creator_id: fields.Integer(required=True),
+            ExpenseModel.k_creation_date: fields.DateTime(required=True),
+        })
+
+        return swagger_model
 
     def __init__(self):
         self.is_removed = False

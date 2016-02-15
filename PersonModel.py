@@ -1,7 +1,8 @@
 from datetime import datetime
+from flask_restplus import fields
 
 from SharedModels import db
-from constants import Constants
+from SharedModels import api
 
 
 class PersonModel(db.Model):
@@ -24,6 +25,18 @@ class PersonModel(db.Model):
     time_stamp = db.Column(db.DateTime)
 
     event_owner = db.relationship("EventModel")
+
+    @classmethod
+    def swagger_return_model(cls):
+        swagger_model = api.model('PersonModel', {
+            PersonModel.k_person_id: fields.Integer(required=True),
+            PersonModel.k_first_name: fields.String(required=True),
+            PersonModel.k_last_name: fields.String(required=True),
+            PersonModel.k_email: fields.String(required=True),
+            PersonModel.k_facebook_id: fields.String(required=True),
+        })
+
+        return swagger_model
 
     @classmethod
     def time_stamp_difference(cls, user_id, time_stamp):

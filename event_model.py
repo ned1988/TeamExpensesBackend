@@ -1,10 +1,11 @@
 from datetime import datetime
 from dateutil.parser import parse
+from flask_restplus import fields
 from sqlalchemy.orm import relationship
 
 from SharedModels import db
+from SharedModels import api
 from constants import Constants
-from PersonModel import PersonModel
 from expense_model import ExpenseModel
 from event_team_members import EventTeamMembers
 
@@ -26,6 +27,19 @@ class EventModel(db.Model):
     end_date = db.Column(db.DateTime)
     time_stamp = db.Column(db.DateTime)
     is_removed = db.Column(db.Boolean)
+
+    @classmethod
+    def swagger_return_model(cls):
+        swagger_model = api.model('EventModel', {
+            EventModel.k_title: fields.Integer(required=True),
+            Constants.k_event_id: fields.Integer(required=True),
+            EventModel.k_creator_id: fields.Integer(required=True),
+            Constants.k_is_removed: fields.Boolean(required=True),
+            EventModel.k_creation_date: fields.Integer(required=True),
+            EventModel.k_end_date: fields.Integer(required=True),
+        })
+
+        return swagger_model
 
     def __init__(self):
         self.is_removed = False
