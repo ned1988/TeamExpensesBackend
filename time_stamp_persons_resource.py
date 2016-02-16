@@ -3,6 +3,7 @@ from flask_restplus import fields
 from dateutil.parser import parse
 from flask_restful import reqparse
 
+from SharedModels import db
 from SharedModels import api
 from constants import Constants
 from event_model import EventModel
@@ -39,51 +40,21 @@ class TimeStampPersonsResource(BaseResource):
             # Wrong user credentials
             return model
 
-        # 1 First of all we need to find ell interested us events:
-        # - it can be created by current user
-        # - user can be the team member in event
-        event_ids = set()
+        select = db.and_(PersonModel.person_id == EventTeamMembers.person_id,
+                         db.or_(EventTeamMembers.person_id == user_id,
+                                db.and_(EventTeamMembers.event_id == EventModel.event_id,
+                                        EventModel.creator_id == user_id)))
 
-        # All events where user is a creator
-        items = EventModel.all_user_events(user_id)
-        for event_model in items:
-            event_ids.add(event_model.event_id)
-
-        # All events where user is a team member
-        items = EventTeamMembers.find_rows_for_user(user_id)
-        for event_team_member_model in items:
-            event_ids.add(event_team_member_model.event_id)
+        query = db.session.query(PersonModel)
+        filter = query.filter(select)
 
         time = args[Constants.k_time_stamp]
-        time_stamp = None
         if time is not None and len(time) > 0:
             time_stamp = parse(time)
-
-        # 2 Collect all user id's
-        user_ids = set()
-        for event_id in event_ids:
-            event_team_members = EventTeamMembers.team_members(event_id)
-
-            for model in event_team_members:
-                user_ids.add(model.person_id)
-
-        # 3 Collect all expenses creator id's
-        for event_id in event_ids:
-            event = EventModel.find_event(event_id)
-            expenses = event.expenses
-            [user_ids.add(expense.creator_id) for expense in expenses]
-
-        # 4 Configure list with user information
-        result = []
-        for user_id in user_ids:
-            person = PersonModel.time_stamp_difference(user_id, time_stamp)
-            if person is not None:
-                result.append(person.to_dict())
-
-        time_stamp = datetime.utcnow()
+            filter = filter.filter(PersonModel.time_stamp > time_stamp)
 
         response = dict()
-        response[Constants.k_result] = result
-        response[Constants.k_time_stamp] = time_stamp
+        response[Constants.k_result] = [model.to_dict() for model in filter]
+        response[Constants.k_time_stamp] = datetime.utcnow()
 
         return response

@@ -1,9 +1,9 @@
-from SharedModels import db
 from datetime import datetime
 from dateutil.parser import parse
 from flask_restplus import fields
 from flask_restful import reqparse
 
+from SharedModels import db
 from SharedModels import api
 from constants import Constants
 from event_model import EventModel
