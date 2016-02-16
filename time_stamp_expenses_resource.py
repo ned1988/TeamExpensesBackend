@@ -3,6 +3,7 @@ from flask_restplus import fields
 from dateutil.parser import parse
 from flask_restful import reqparse
 
+from SharedModels import db
 from SharedModels import api
 from constants import Constants
 from event_model import EventModel
@@ -13,7 +14,7 @@ from event_team_members import EventTeamMembers
 
 model = api.model('TimeStampExpensesResource', {
     Constants.k_result: fields.List(fields.Nested(ExpenseModel.swagger_return_model())),
-    Constants.k_time_stamp: fields.DateTime(dt_format='ISO8601')
+    Constants.k_time_stamp: fields.DateTime()
 })
 
 
@@ -40,35 +41,25 @@ class TimeStampExpensesResource(BaseResource):
             # Wrong user credentials
             return model
 
-        # 1 First of all we need to find ell interested us events:
-        # - it can be created by current user
-        # - user can be the team member in event
-        event_ids = set()
-
-        # All events where user is a creator
-        items = EventModel.all_user_events(user_id)
-        for event_model in items:
-            event_ids.add(event_model.event_id)
-
-        # All events where user is a team member
-        items = EventTeamMembers.find_rows_for_user(user_id)
-        for event_team_member_model in items:
-            event_ids.add(event_team_member_model.event_id)
+        query = db.session.query(ExpenseModel)
+        select = db.and_(ExpenseModel.event_id == EventModel.event_id,
+                         EventModel.event_id == EventTeamMembers.event_id,
+                         EventTeamMembers.person_id == user_id)
 
         time = args[Constants.k_time_stamp]
         time_stamp = None
         if time is not None and len(time) > 0:
             time_stamp = parse(time)
 
-        # 2 Now wee need to collect expenses for all events
-        result = []
-        for event_id in event_ids:
-            expenses = ExpenseModel.time_stamp_difference(event_id, time_stamp)
-            result += [expense.to_dict() for expense in expenses]
+        if time_stamp is not None:
+            items = query.filter(select, ExpenseModel.time_stamp > time_stamp)
+        else:
+            items = query.filter(select)
+
         time_stamp = datetime.utcnow()
 
         response = dict()
-        response[Constants.k_result] = result
-        response[Constants.k_time_stamp] = time_stamp.isoformat()
+        response[Constants.k_result] = [model.to_dict() for model in items]
+        response[Constants.k_time_stamp] = time_stamp
 
         return response

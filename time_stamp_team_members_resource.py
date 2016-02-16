@@ -13,7 +13,7 @@ from event_team_members import EventTeamMembers
 
 model = api.model('TimeStampTeamMembersResource', {
     Constants.k_result: fields.List(fields.Nested(EventTeamMembers.swagger_return_model())),
-    Constants.k_time_stamp: fields.DateTime(dt_format='ISO8601')
+    Constants.k_time_stamp: fields.DateTime()
 })
 
 
@@ -57,6 +57,6 @@ class TimeStampTeamMembersResource(BaseResource):
 
         response = dict()
         response[Constants.k_result] = result
-        response[Constants.k_time_stamp] = time_stamp.isoformat()
+        response[Constants.k_time_stamp] = time_stamp
 
         return response
