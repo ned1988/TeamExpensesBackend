@@ -8,8 +8,8 @@ from PersonModel import PersonModel
 from SharedModels import db, passlib
 from token_serializer import TokenSerializer
 
-model = api.model('UserLoginResource', {
-    Constants.k_user: fields.List(fields.Nested(PersonModel.swagger_return_model())),
+model = api.model('UserRegisterResource', {
+    Constants.k_user: fields.Nested(PersonModel.swagger_return_model()),
     Constants.k_status: fields.String()
 })
 

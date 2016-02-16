@@ -9,8 +9,12 @@ from SharedModels import passlib
 from PersonModel import PersonModel
 from token_serializer import TokenSerializer
 
+person_model_extend = api.extend('PersonModelExtend', PersonModel.swagger_return_model(), {
+    Constants.k_user_token: fields.String(required=True)
+})
+
 model = api.model('UserLoginResource', {
-    Constants.k_user: fields.List(fields.Nested(PersonModel.swagger_return_model())),
+    Constants.k_user: fields.Nested(person_model_extend),
     Constants.k_status: fields.String()
 })
 
