@@ -24,7 +24,6 @@ class UserLoginResource(Resource):
     parser.add_argument('password', type=str, help='User password', location='form', required=True)
 
     @api.doc(parser=parser)
-    @api.expect(parser)
     @api.response(200, 'Success', model)
     def post(self):
         parser = reqparse.RequestParser()

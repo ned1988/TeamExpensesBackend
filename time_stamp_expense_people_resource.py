@@ -25,7 +25,7 @@ class TimeStampExpensePeopleResource(BaseResource):
     parser.add_argument(Constants.k_time_stamp, type=str, help='Time Stamp', location='headers')
 
     @api.doc(parser=parser)
-    @api.marshal_with(model)
+    @api.response(200, 'Success', model)
     def get(self):
         parser = reqparse.RequestParser()
         parser.add_argument(Constants.k_user_id, type=str, help='User ID', location='headers', required=True)
