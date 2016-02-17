@@ -10,7 +10,6 @@ from base_resource import BaseResource
 
 model = api.model('SynchroniseExpenseResource', {
     Constants.k_result: fields.Nested(ExpenseModel.swagger_return_model()),
-    Constants.k_status: fields.String()
 })
 
 
@@ -31,7 +30,7 @@ class SynchroniseExpenseResource(BaseResource):
     parser.add_argument(ExpenseModel.k_creation_date, type=str, help='Expense creation date', location='headers')
 
     @api.doc(parser=parser)
-    @api.marshal_with(model)
+    @api.response(200, 'Success', model)
     def post(self):
         parser = reqparse.RequestParser()
         parser.add_argument(Constants.k_user_id, type=int, help='User ID', location='form', required=True)

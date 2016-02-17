@@ -63,6 +63,6 @@ class TimeStampExpensesResource(BaseResource):
 
         response = dict()
         response[Constants.k_result] = [model.to_dict() for model in items]
-        response[Constants.k_time_stamp] = time_stamp
+        response[Constants.k_time_stamp] = time_stamp.isoformat()
 
         return response

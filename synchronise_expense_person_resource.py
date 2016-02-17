@@ -11,7 +11,6 @@ from expense_person import ExpensePerson
 
 model = api.model('SynchroniseExpensePersonResource', {
     Constants.k_result: fields.Nested(ExpensePerson.swagger_return_model()),
-    Constants.k_status: fields.String(),
 })
 
 
@@ -26,7 +25,7 @@ class SynchroniseExpensePersonResource(BaseResource):
     parser.add_argument(Constants.k_is_removed, type=str, help='Is team member removed from event', location='headers')
 
     @api.doc(parser=parser)
-    @api.marshal_with(model)
+    @api.response(200, 'Success', model)
     def post(self):
         parser = reqparse.RequestParser()
         parser.add_argument(Constants.k_user_id, type=str, help='User ID', location='form', required=True)

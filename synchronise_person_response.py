@@ -9,7 +9,6 @@ from base_resource import BaseResource
 
 model = api.model('SynchronisePersonResource', {
     Constants.k_result: fields.Nested(PersonModel.swagger_return_model()),
-    Constants.k_status: fields.String()
 })
 
 
@@ -28,7 +27,7 @@ class SynchronisePersonResource(BaseResource):
     parser.add_argument(PersonModel.k_facebook_id, type=str, help='Facebook ID', location='headers')
 
     @api.doc(parser=parser)
-    @api.marshal_with(model)
+    @api.response(200, 'Success', model)
     def post(self):
         parser = reqparse.RequestParser()
         parser.add_argument(Constants.k_user_id, type=int, help='User ID', location='form', required=True)

@@ -102,10 +102,10 @@ class EventModel(db.Model):
         json_object[Constants.k_is_removed] = self.is_removed
 
         if self.creation_date is not None:
-            json_object[self.k_creation_date] = self.creation_date
+            json_object[self.k_creation_date] = self.creation_date.isoformat()
 
         if self.end_date is not None:
-            json_object[self.k_end_date] = self.end_date
+            json_object[self.k_end_date] = self.end_date.isoformat()
 
         return json_object
 

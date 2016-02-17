@@ -10,7 +10,6 @@ from base_resource import BaseResource
 
 model = api.model('EventSynchroniseResource', {
     Constants.k_result: fields.Nested(EventModel.swagger_return_model()),
-    Constants.k_status: fields.String(),
 })
 
 
@@ -28,7 +27,7 @@ class EventSynchroniseResource(BaseResource):
     parser.add_argument(Constants.k_is_removed, type=str, help='Is event removed', location='headers')
 
     @api.doc(parser=parser)
-    @api.marshal_with(model)
+    @api.response(200, 'Success', model)
     def post(self):
         parser = reqparse.RequestParser()
         parser.add_argument(Constants.k_user_id, type=str, help='User ID', location='form', required=True)

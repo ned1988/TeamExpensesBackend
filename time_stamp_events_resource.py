@@ -12,7 +12,6 @@ from base_resource import BaseResource
 model = api.model('TimeStampEventsResource', {
     Constants.k_result: fields.List(fields.Nested(EventModel.swagger_return_model())),
     Constants.k_time_stamp: fields.DateTime(),
-    Constants.k_status: fields.String(),
 })
 
 
@@ -23,7 +22,7 @@ class TimeStampEventsResource(BaseResource):
     parser.add_argument(Constants.k_time_stamp, type=str, help='Time Stamp', location='headers')
 
     @api.doc(parser=parser)
-    @api.marshal_with(model)
+    @api.response(200, 'Success', model)
     def get(self):
         parser = reqparse.RequestParser()
         parser.add_argument(Constants.k_user_id, type=str, help='User ID', location='headers', required=True)
@@ -50,6 +49,6 @@ class TimeStampEventsResource(BaseResource):
 
         response = dict()
         response[Constants.k_result] = result
-        response[Constants.k_time_stamp] = time_stamp
+        response[Constants.k_time_stamp] = time_stamp.isoformat()
 
         return response

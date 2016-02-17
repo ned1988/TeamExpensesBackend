@@ -14,7 +14,6 @@ from event_team_members import EventTeamMembers
 model = api.model('TimeStampPersonsResource', {
     Constants.k_result: fields.List(fields.Nested(PersonModel.swagger_return_model())),
     Constants.k_time_stamp: fields.DateTime(),
-    Constants.k_status: fields.String()
 })
 
 
@@ -25,7 +24,7 @@ class TimeStampPersonsResource(BaseResource):
     parser.add_argument(Constants.k_time_stamp, type=str, help='Time Stamp', location='headers')
 
     @api.doc(parser=parser)
-    @api.marshal_with(model)
+    @api.response(200, 'Success', model)
     def get(self):
         parser = reqparse.RequestParser()
         parser.add_argument(Constants.k_user_id, type=str, help='User ID', location='headers', required=True)
@@ -56,6 +55,6 @@ class TimeStampPersonsResource(BaseResource):
 
         response = dict()
         response[Constants.k_result] = [model.to_dict() for model in filter]
-        response[Constants.k_time_stamp] = datetime.utcnow()
+        response[Constants.k_time_stamp] = datetime.utcnow().isoformat()
 
         return response
