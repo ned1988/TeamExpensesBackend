@@ -38,8 +38,6 @@ class TimeStampExpensesResource(BaseResource):
         token = args[Constants.k_user_token]
         model = BaseResource.check_user_credentials_with_credentials(user_id, token)
 
-        print args
-
         if not isinstance(model, PersonModel):
             # Wrong user credentials
             return model

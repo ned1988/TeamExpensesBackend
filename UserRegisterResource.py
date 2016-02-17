@@ -23,7 +23,7 @@ class UserRegisterResource(Resource):
     parser.add_argument('facebookID', type=str, help='Facebook ID', location='form')
 
     @api.doc(parser=parser)
-    @api.marshal_with(model)
+    @api.response(200, 'Success', model)
     def post(self):
         parser = reqparse.RequestParser()
         parser.add_argument('email', type=str, help='User email', location='form', required=True)

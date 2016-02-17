@@ -9,7 +9,6 @@ from constants import Constants
 from event_model import EventModel
 from PersonModel import PersonModel
 from base_resource import BaseResource
-from expense_model import ExpenseModel
 from expense_person import ExpensePerson
 from event_team_members import EventTeamMembers
 
@@ -51,16 +50,16 @@ class TimeStampExpensePeopleResource(BaseResource):
 
         query = db.session.query(ExpensePerson)
 
-        db_and = db.and_(ExpenseModel.event_id == EventTeamMembers.event_id,
-                         EventTeamMembers.person_id == user_id,
-                         EventModel.event_id == ExpenseModel.event_id,
-                         ExpensePerson.expense_id == ExpenseModel.expense_id,
-                         ExpenseModel.creator_id == ExpensePerson.person_id)
+        select = db.and_(PersonModel.person_id == ExpensePerson.person_id,
+                         PersonModel.person_id == EventTeamMembers.person_id,
+                         db.or_(EventTeamMembers.person_id == user_id,
+                                db.and_(EventTeamMembers.event_id == EventModel.event_id,
+                                        EventModel.creator_id == user_id)))
 
         if time_stamp is not None:
-            items = query.filter(db_and, ExpensePerson.time_stamp > time_stamp)
+            items = query.filter(select, ExpensePerson.time_stamp > time_stamp)
         else:
-            items = query.filter(db_and)
+            items = query.filter(select)
 
         time_stamp = datetime.utcnow()
         result = []
