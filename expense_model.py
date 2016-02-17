@@ -33,8 +33,8 @@ class ExpenseModel(db.Model):
     @classmethod
     def swagger_return_model(cls):
         swagger_model = api.model('ExpenseModel', {
-            ExpenseModel.k_title: fields.Integer(required=True),
-            ExpenseModel.k_value: fields.Integer(required=True),
+            ExpenseModel.k_title: fields.String(required=True),
+            ExpenseModel.k_value: fields.Float(required=True),
             Constants.k_event_id: fields.Integer(required=True),
             Constants.k_is_removed: fields.Boolean(required=True),
             ExpenseModel.k_expense_id: fields.Integer(required=True),

@@ -9,6 +9,7 @@ from base_resource import BaseResource
 
 model = api.model('SynchronisePersonResource', {
     Constants.k_result: fields.Nested(PersonModel.swagger_return_model()),
+    Constants.k_status: fields.String()
 })
 
 

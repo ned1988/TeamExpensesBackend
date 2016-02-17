@@ -11,29 +11,30 @@ from expense_person import ExpensePerson
 
 model = api.model('SynchroniseExpensePersonResource', {
     Constants.k_result: fields.Nested(ExpensePerson.swagger_return_model()),
+    Constants.k_status: fields.String(),
 })
 
 
 class SynchroniseExpensePersonResource(BaseResource):
     parser = api.parser()
-    parser.add_argument(Constants.k_user_id, type=int, help='User ID', location='form', required=True)
+    parser.add_argument(Constants.k_user_id, type=str, help='User ID', location='form', required=True)
     parser.add_argument(Constants.k_user_token, type=str, help='User token', location='form', required=True)
 
-    parser.add_argument(ExpenseModel.k_expense_id, type=int, help='Expense ID', location='headers', required=True)
-    parser.add_argument(PersonModel.k_person_id, type=int, help='Person ID', location='headers', required=True)
-    parser.add_argument(ExpensePerson.k_expense_person_id, type=int, help='Expense Person ID', location='headers')
+    parser.add_argument(ExpenseModel.k_expense_id, type=str, help='Expense ID', location='headers', required=True)
+    parser.add_argument(PersonModel.k_person_id, type=str, help='Person ID', location='headers', required=True)
+    parser.add_argument(ExpensePerson.k_expense_person_id, type=str, help='Expense Person ID', location='headers')
     parser.add_argument(Constants.k_is_removed, type=str, help='Is team member removed from event', location='headers')
 
     @api.doc(parser=parser)
     @api.marshal_with(model)
     def post(self):
         parser = reqparse.RequestParser()
-        parser.add_argument(Constants.k_user_id, type=int, help='User ID', location='form', required=True)
+        parser.add_argument(Constants.k_user_id, type=str, help='User ID', location='form', required=True)
         parser.add_argument(Constants.k_user_token, type=str, help='User token', location='form', required=True)
 
-        parser.add_argument(ExpenseModel.k_expense_id, type=int, help='Expense ID', location='headers', required=True)
-        parser.add_argument(PersonModel.k_person_id, type=int, help='Person ID', location='headers', required=True)
-        parser.add_argument(ExpensePerson.k_expense_person_id, type=int, help='Expense Person ID', location='headers')
+        parser.add_argument(ExpenseModel.k_expense_id, type=str, help='Expense ID', location='headers', required=True)
+        parser.add_argument(PersonModel.k_person_id, type=str, help='Person ID', location='headers', required=True)
+        parser.add_argument(ExpensePerson.k_expense_person_id, type=str, help='Expense Person ID', location='headers')
         parser.add_argument(Constants.k_is_removed, type=str, help='Is team member removed from event',
                             location='headers')
         args = parser.parse_args()

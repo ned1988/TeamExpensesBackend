@@ -10,6 +10,7 @@ from base_resource import BaseResource
 
 model = api.model('SynchroniseExpenseResource', {
     Constants.k_result: fields.Nested(ExpenseModel.swagger_return_model()),
+    Constants.k_status: fields.String()
 })
 
 

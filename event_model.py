@@ -31,12 +31,12 @@ class EventModel(db.Model):
     @classmethod
     def swagger_return_model(cls):
         swagger_model = api.model('EventModel', {
-            EventModel.k_title: fields.Integer(required=True),
+            EventModel.k_title: fields.String(required=True),
             Constants.k_event_id: fields.Integer(required=True),
             EventModel.k_creator_id: fields.Integer(required=True),
             Constants.k_is_removed: fields.Boolean(required=True),
-            EventModel.k_creation_date: fields.Integer(required=True),
-            EventModel.k_end_date: fields.Integer(required=True),
+            EventModel.k_creation_date: fields.DateTime(),
+            EventModel.k_end_date: fields.DateTime(),
         })
 
         return swagger_model
@@ -102,10 +102,10 @@ class EventModel(db.Model):
         json_object[Constants.k_is_removed] = self.is_removed
 
         if self.creation_date is not None:
-            json_object[self.k_creation_date] = self.creation_date.isoformat()
+            json_object[self.k_creation_date] = self.creation_date
 
         if self.end_date is not None:
-            json_object[self.k_end_date] = self.end_date.isoformat()
+            json_object[self.k_end_date] = self.end_date
 
         return json_object
 

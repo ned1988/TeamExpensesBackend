@@ -13,7 +13,8 @@ from event_team_members import EventTeamMembers
 
 model = api.model('TimeStampPersonsResource', {
     Constants.k_result: fields.List(fields.Nested(PersonModel.swagger_return_model())),
-    Constants.k_time_stamp: fields.DateTime()
+    Constants.k_time_stamp: fields.DateTime(),
+    Constants.k_status: fields.String()
 })
 
 

@@ -65,6 +65,4 @@ class SynchroniseResponse(BaseResource):
         response[Constants.k_time_stamp] = time_stamp.isoformat()
         response['result'] = result
 
-        # print response
-
         return response

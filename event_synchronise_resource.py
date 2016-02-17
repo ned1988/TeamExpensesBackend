@@ -10,12 +10,13 @@ from base_resource import BaseResource
 
 model = api.model('EventSynchroniseResource', {
     Constants.k_result: fields.Nested(EventModel.swagger_return_model()),
+    Constants.k_status: fields.String(),
 })
 
 
 class EventSynchroniseResource(BaseResource):
     parser = api.parser()
-    parser.add_argument(Constants.k_user_id, type=int, help='User ID', location='form', required=True)
+    parser.add_argument(Constants.k_user_id, type=str, help='User ID', location='form', required=True)
     parser.add_argument(Constants.k_user_token, type=str, help='User token', location='form', required=True)
     parser.add_argument(EventModel.k_creator_id, type=str, help='Event creator ID', location='headers', required=True)
 
@@ -30,7 +31,7 @@ class EventSynchroniseResource(BaseResource):
     @api.marshal_with(model)
     def post(self):
         parser = reqparse.RequestParser()
-        parser.add_argument(Constants.k_user_id, type=int, help='User ID', location='form', required=True)
+        parser.add_argument(Constants.k_user_id, type=str, help='User ID', location='form', required=True)
         parser.add_argument(Constants.k_user_token, type=str, help='User token', location='form', required=True)
         parser.add_argument(EventModel.k_creator_id, type=str, help='Event creator ID', location='headers',
                             required=True)

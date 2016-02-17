@@ -14,7 +14,8 @@ from event_team_members import EventTeamMembers
 
 model = api.model('TimeStampExpensesResource', {
     Constants.k_result: fields.List(fields.Nested(ExpenseModel.swagger_return_model())),
-    Constants.k_time_stamp: fields.DateTime()
+    Constants.k_time_stamp: fields.DateTime(),
+    Constants.k_status: fields.String(),
 })
 
 
@@ -36,6 +37,8 @@ class TimeStampExpensesResource(BaseResource):
         user_id = args[Constants.k_user_id]
         token = args[Constants.k_user_token]
         model = BaseResource.check_user_credentials_with_credentials(user_id, token)
+
+        print args
 
         if not isinstance(model, PersonModel):
             # Wrong user credentials

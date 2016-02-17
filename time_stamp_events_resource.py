@@ -11,7 +11,8 @@ from base_resource import BaseResource
 
 model = api.model('TimeStampEventsResource', {
     Constants.k_result: fields.List(fields.Nested(EventModel.swagger_return_model())),
-    Constants.k_time_stamp: fields.DateTime()
+    Constants.k_time_stamp: fields.DateTime(),
+    Constants.k_status: fields.String(),
 })
 
 

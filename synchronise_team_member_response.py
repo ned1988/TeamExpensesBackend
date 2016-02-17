@@ -10,6 +10,7 @@ from event_team_members import EventTeamMembers
 
 model = api.model('SynchroniseTeamMemberResource', {
     Constants.k_result: fields.Nested(EventTeamMembers.swagger_return_model()),
+    Constants.k_status: fields.String()
 })
 
 
