@@ -8,7 +8,7 @@ from event_model import EventModel
 from PersonModel import PersonModel
 from base_resource import BaseResource
 
-model = api.model('SynchroniseExpenseResource', {
+model = api.model('EventSynchroniseResource', {
     Constants.k_result: fields.Nested(EventModel.swagger_return_model()),
 })
 
