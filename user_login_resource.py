@@ -25,6 +25,7 @@ class UserLoginResource(Resource):
 
     @api.doc(parser=parser)
     @api.response(200, 'Success', model)
+    @api.response(401, 'Error', Constants.error_login_response())
     def post(self):
         parser = reqparse.RequestParser()
         parser.add_argument('email', type=str, help='User email', location='form', required=True)

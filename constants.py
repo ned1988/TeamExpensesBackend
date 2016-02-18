@@ -1,3 +1,8 @@
+from flask_restplus import fields
+
+from SharedModels import api
+
+
 class Constants:
     def __init__(self):
         pass
@@ -14,6 +19,21 @@ class Constants:
     k_team_members = 'teamMembers'
     k_user_details = 'userDetails'
     k_user_credentials_correct = 'user_credentials_correct'
+
+    k_no_user_id = 'no_user_id'
+    k_token_expired = 'token_expired'
+    k_token_not_valid = 'token_not_valid'
+
+
+    @staticmethod
+    def error_login_response():
+        error_login_response = api.model('ErrorLoginResponse', {
+            Constants.k_status: fields.String(enum=[Constants.k_token_expired,
+                                                    Constants.k_token_not_valid,
+                                                    Constants.k_no_user_id])
+        })
+
+        return error_login_response
 
     @staticmethod
     def error_token_not_valid():

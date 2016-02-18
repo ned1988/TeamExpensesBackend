@@ -27,6 +27,7 @@ class TimeStampExpensesResource(BaseResource):
 
     @api.doc(parser=parser)
     @api.response(200, 'Success', model)
+    @api.response(401, 'Error', Constants.error_login_response())
     def get(self):
         parser = reqparse.RequestParser()
         parser.add_argument(Constants.k_user_id, type=str, help='User ID', location='headers', required=True)
