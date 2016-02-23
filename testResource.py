@@ -19,6 +19,7 @@ class testResource(BaseResource):
         response = urllib2.urlopen(req)
         the_page = response.read()
 
-        the_page = the_page.decode('string_escape')
+        the_page = the_page.decode('string_escape').decode('string_escape')
+        the_page = the_page.replace('""', '')
 
         return the_page
