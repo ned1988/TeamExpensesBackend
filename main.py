@@ -7,6 +7,7 @@ from flask_passlib.context import werkzeug_salted_sha1
 from flask_passlib.context import werkzeug_salted_sha256
 from flask_passlib.context import werkzeug_salted_sha512
 
+from testResource import testResource
 from SharedModels import db, passlib
 from SharedModels import api as docu_api
 from user_login_resource import UserLoginResource
@@ -49,6 +50,8 @@ passlib.init_app(app, context=LazyCryptContext(
 
 # Resources
 
+api.add_resource(testResource, '/test')
+
 api.add_resource(TimeStampEventsResource, '/timeStamp/events')
 api.add_resource(TimeStampPersonsResource, '/timeStamp/persons')
 api.add_resource(TimeStampExpensesResource, '/timeStamp/expenses')
@@ -65,6 +68,8 @@ api.add_resource(UserLoginResource, '/user/login')
 api.add_resource(UserRegisterResource, '/user/register')
 
 # REST API documentation
+
+docu_api.add_resource(testResource, '/test')
 
 docu_api.add_resource(TimeStampEventsResource, '/timeStamp/events')
 docu_api.add_resource(TimeStampPersonsResource, '/timeStamp/persons')
