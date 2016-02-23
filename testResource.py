@@ -19,4 +19,6 @@ class testResource(BaseResource):
         response = urllib2.urlopen(req)
         the_page = response.read()
 
+        the_page = the_page.decode('string_escape')
+
         return the_page
