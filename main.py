@@ -31,7 +31,6 @@ app = Flask(__name__)
 app.config.SWAGGER_UI_DOC_EXPANSION = 'list'
 
 CORS(app)
-app.config['CORS_HEADERS'] = 'Content-Type'
 
 app.config['SQLALCHEMY_DATABASE_URI'] = os.environ['DATABASE_URL']
 
