@@ -1,5 +1,6 @@
 import os
 from flask import Flask
+from flask_cors import CORS
 from flask_restful import Api
 from flask_passlib import LazyCryptContext
 from flask_passlib.context import werkzeug_salted_md5
@@ -28,6 +29,9 @@ os.environ.setdefault("DATABASE_URL", "postgresql://localhost/postgres")
 # Create Flask application
 app = Flask(__name__)
 app.config.SWAGGER_UI_DOC_EXPANSION = 'list'
+
+CORS(app)
+app.config['CORS_HEADERS'] = 'Content-Type'
 
 app.config['SQLALCHEMY_DATABASE_URI'] = os.environ['DATABASE_URL']
 
