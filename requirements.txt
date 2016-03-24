@@ -7,3 +7,4 @@ Flask-Passlib
 python-dateutil
 pytz
 watchdog
+flask_cors
